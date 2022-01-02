@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import background from 'images/background.png';
 import icon from 'images/icon.png';
 
@@ -8,24 +8,23 @@ import icon from 'images/icon.png';
 import styles from './styles.module.scss';
 import { Link } from 'react-router-dom';
 
-export default class Login extends Component {
+export default class Register extends Component {
   constructor() {
     super();
     this.state = {
       inputErrors: false,
-      username: 'admin@admin.com',
-      password: 'admin123',
+      username: '',
+      password: '',
+      passwordAgain: '',
     };
   }
 
-  handleChange = (event) => {
-    // const passwordRegex = new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$');
-
-    console.log('asd');
-  };
-
   handlePasswordChange = (e) => {
     this.setState({ password: e.target.value });
+  };
+
+  handlePasswordAgainChange = (e) => {
+    this.setState({ passwordAgain: e.target.value });
   };
 
   handleUsernameChange = (e) => {
@@ -36,9 +35,14 @@ export default class Login extends Component {
     e.preventDefault();
     e.stopPropagation();
 
+    if (this.state.password !== this.state.passwordAgain) {
+      alert('Password mismatch!');
+      return;
+    }
+
     const auth = getAuth();
     try {
-      await signInWithEmailAndPassword(auth, this.state.username, this.state.password);
+      await createUserWithEmailAndPassword(auth, this.state.username, this.state.password);
     } catch (e) {
       this.setState({ inputErrors: true });
     }
@@ -56,7 +60,7 @@ export default class Login extends Component {
 
           <div className={styles.loginFormWrapper}>
             <div className={styles.titleWrapper}>
-              <h1>Sign in to </h1>
+              <h1>Sign up to </h1>
               <h2>The simplest chat app ever made</h2>
             </div>
 
@@ -71,14 +75,22 @@ export default class Login extends Component {
                     Password:
                     <input onChange={this.handlePasswordChange} type="password" placeholder="Enter your password" />
                   </label>
+                  <label>
+                    Password Again:
+                    <input
+                      onChange={this.handlePasswordAgainChange}
+                      type="password"
+                      placeholder="Enter your password again"
+                    />
+                  </label>
                 </div>
                 <span className={this.state.inputErrors ? styles.showError : ''}>Invalid username or password.</span>
-                <input onClick={this.handleSubmit} type="submit" value="Login" />
+                <input onClick={this.handleSubmit} type="submit" value="Register" />
 
                 <div className={styles.bottomLabel}>
-                  Don’t have an Account?{' '}
-                  <Link className={styles.registerLink} to="/register">
-                    Register
+                  Already have an Account?{' '}
+                  <Link className={styles.registerLink} to="/login">
+                    Login
                   </Link>
                 </div>
               </form>
