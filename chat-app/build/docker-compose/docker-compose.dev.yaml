@@ -1,0 +1,27 @@
+# DEVELOPMENT version
+version: "3.7"
+services:
+  api:
+    build:
+      context: "../../"
+      dockerfile: ./build/docker/node/Dockerfile.dev
+      args:
+        PACKAGE: "api"
+    networks:
+      - network-1
+    ports:
+      - "9000:3000"
+  group-chat:
+    build:
+      context: "../../"
+      dockerfile: ./build/docker/react/Dockerfile.dev
+      args:
+        PACKAGE: "group-chat"
+    networks:
+      - network-1
+    ports:
+      - "9001:4200"
+
+networks:
+  network-1:
+    external: true
