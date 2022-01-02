@@ -51,10 +51,130 @@
           }
         }
       }
+    },
+    "group-chat": {
+      "root": "apps/group-chat",
+      "sourceRoot": "apps/group-chat/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/group-chat",
+            "index": "apps/group-chat/src/index.html",
+            "main": "apps/group-chat/src/main.tsx",
+            "polyfills": "apps/group-chat/src/polyfills.ts",
+            "tsConfig": "apps/group-chat/tsconfig.app.json",
+            "assets": [
+              "apps/group-chat/src/favicon.ico",
+              "apps/group-chat/src/assets"
+            ],
+            "styles": ["apps/group-chat/src/styles.scss"],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/group-chat/src/environments/environment.ts",
+                  "with": "apps/group-chat/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "group-chat:build",
+            "hmr": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "group-chat:build:production",
+              "hmr": false
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/group-chat/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/group-chat"],
+          "options": {
+            "jestConfig": "apps/group-chat/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "group-chat-e2e": {
+      "root": "apps/group-chat-e2e",
+      "sourceRoot": "apps/group-chat-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/group-chat-e2e/cypress.json",
+            "devServerTarget": "group-chat:serve",
+            "tsConfig": "apps/group-chat-e2e/tsconfig.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "group-chat:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/group-chat-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
     }
   },
   "cli": {
     "defaultCollection": "@nrwl/nest"
   },
-  "defaultProject": "api"
+  "defaultProject": "api",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "scss"
+      },
+      "library": {
+        "style": "scss",
+        "linter": "eslint"
+      }
+    }
+  }
 }
