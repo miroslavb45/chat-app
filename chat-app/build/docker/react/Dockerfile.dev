@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:14-alpine
 
 # Install OS requirements
 RUN apk add --no-cache git openssh-client curl
@@ -8,11 +8,11 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install global NPM packages
-RUN yarn global add @nrwl/cli
+RUN npm install @nrwl/cli
 
 # Install local NPM packages
-COPY package.json yarn.lock* /usr/src/app/
-RUN yarn install --ignore-optional
+COPY package.json package-lock.json /usr/src/app/
+RUN npm install
 
 ARG PACKAGE
 RUN test -n "$PACKAGE" || (echo "No package specified during build process. Set PACKAGE ENV variable." && false)
@@ -22,5 +22,5 @@ ENV PACKAGE=$PACKAGE
 COPY . .
 
 # Serve the application
-EXPOSE 4200
+EXPOSE 3000
 CMD ["sh", "-c", "./node_modules/.bin/nx run $PACKAGE:serve"]

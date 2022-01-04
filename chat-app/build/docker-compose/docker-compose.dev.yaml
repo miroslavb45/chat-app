@@ -10,7 +10,11 @@ services:
     networks:
       - network-1
     ports:
-      - "9000:3000"
+      - "3200:3200"
+    volumes:
+      - "../../apps:/usr/src/app/apps:delegated"
+      - "../../dist:/usr/src/app/dist:delegated"
+      - "../../package.json:/usr/src/app/package.json:delegated"
   group-chat:
     build:
       context: "../../"
@@ -20,7 +24,27 @@ services:
     networks:
       - network-1
     ports:
-      - "9001:4200"
+      - "4200:3000"
+    depends_on:
+      - api
+    environment:
+      NODE_ENV: "development"
+      DANGEROUSLY_DISABLE_HOST_CHECK: "true"
+    volumes:
+      - "../../apps:/usr/src/app/apps:delegated"
+      - "../../dist:/usr/src/app/dist:delegated"
+      - "../../package.json:/usr/src/app/package.json:delegated"
+    
+  # redis:
+  #   image: redis:5.0-alpine
+  #   networks:
+  #     - network-1
+  #   command: "redis-server --requirepass ${REDIS_PASSWORD}"
+  #   ports:
+  #     - 6379:6379
+  #   logging:
+  #     driver: none
+
 
 networks:
   network-1:

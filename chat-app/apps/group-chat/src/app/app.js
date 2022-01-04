@@ -7,7 +7,6 @@ import Login from './Login';
 import Home from './Home';
 import { AuthContextProvider, useAuthState } from './contexts/FirebaseContext';
 import Logout from './Logout';
-import Topbar from './Topbar';
 import Register from './Register';
 
 import './index.scss';
