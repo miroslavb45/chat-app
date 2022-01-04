@@ -43,7 +43,8 @@ export class PreauthMiddleware implements NestMiddleware {
                     this.accessDenied(req.url, res);
                 });
         } else {
-            this.accessDenied(req.url, res);
+            // this.accessDenied(req.url, res); TODO: Delete this, to enable auth
+            next();
         }
     }
 

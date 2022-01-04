@@ -15,6 +15,21 @@ services:
       - "../../apps:/usr/src/app/apps:delegated"
       - "../../dist:/usr/src/app/dist:delegated"
       - "../../package.json:/usr/src/app/package.json:delegated"
+
+  api_2:
+    build:
+      context: "../../"
+      dockerfile: ./build/docker/node/Dockerfile.dev
+      args:
+        PACKAGE: "api"
+    networks:
+      - network-1
+    ports:
+      - "3201:3200"
+    volumes:
+      - "../../apps:/usr/src/app/apps:delegated"
+      - "../../dist:/usr/src/app/dist:delegated"
+      - "../../package.json:/usr/src/app/package.json:delegated"
   group-chat:
     build:
       context: "../../"
