@@ -1,0 +1,118 @@
+@import '~stylesheets/abstracts';
+
+.wrapper {
+  height: 100vh;
+  background-size: cover;
+
+  //////////////////
+
+  .chatContainer {
+    $top: 140px;
+    position: fixed;
+    right: 0;
+    top: $top;
+    width: 345px;
+    height: calc(100% - #{$top});
+    border-radius: 4px 0px 0px 0px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(60px);
+    background: rgba(40, 38, 39, 0.6);
+    overflow: hidden;
+
+    @supports not (backdrop-filter: blur(60px)) {
+      background-color: #24252b;
+    }
+
+    //they say this is an ios specific property. we need this cuz on paper ios supports blur background but in reality it doesn't..
+    @supports (-webkit-touch-callout: none) {
+      background-color: #24252b;
+    }
+
+    @include media('>=lg+') {
+      backdrop-filter: unset;
+    }
+
+    &.chat-enter {
+      transform: translateX(345px);
+      opacity: 0;
+
+      @supports (-webkit-touch-callout: none) {
+        opacity: 1;
+      }
+    }
+
+    &.chat-enter-active {
+      transform: translateX(0px);
+      opacity: 1;
+      transition: transform 400ms ease-in-out, opacity 400ms ease-in-out;
+    }
+
+    &.chat-exit {
+      transform: translateX(0px);
+      opacity: 1;
+    }
+
+    &.chat-exit-active {
+      transform: translateX(345px);
+      transition: transform 400ms ease-in-out, opacity 400ms ease-in-out;
+      opacity: 0;
+    }
+  }
+
+  .toggleChatButton {
+    align-items: center;
+    background: $lapalma;
+    bottom: calc(50vh - 50px);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
+    color: $white;
+    cursor: pointer;
+    height: 85px;
+    justify-content: center;
+    position: fixed;
+    right: 0;
+    text-transform: uppercase;
+    width: 24px;
+    font-size: 14px;
+    line-height: 20px;
+    border-radius: 10px 0px 0px 10px;
+
+    &.isOpen {
+      right: 345px;
+      @include media('height<=xs+') {
+        bottom: 0;
+      }
+    }
+
+    @include media('>=sm-') {
+      display: flex;
+    }
+    i {
+      padding-right: 6px;
+    }
+
+    .toggleChatButtonLabel {
+      display: flex;
+      align-items: center;
+      transform: rotate(-90deg);
+    }
+
+    &.button-enter {
+      transform: translateX(345px);
+    }
+
+    &.button-enter-active {
+      transform: translateX(0px);
+      transition: transform 400ms ease-in-out;
+    }
+
+    &.button-exit {
+      transform: translateX(-345px);
+    }
+
+    &.button-exit-active {
+      transform: translateX(0px);
+      transition: transform 400ms ease-in-out;
+    }
+  }
+  //////////////
+}

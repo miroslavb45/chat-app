@@ -13,7 +13,7 @@ export class AppController {
   }
 
   @EventPattern('message')
-  async pubSubMessageHandler(data: Record<string, unknown>) {
-    this.websocketService.emitMessageToClients(data.message as string);
+  async pubSubMessageHandler(data: any) {
+    this.websocketService.emitMessageToClients(data);
   }
 }

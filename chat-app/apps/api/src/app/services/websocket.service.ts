@@ -14,7 +14,8 @@ export class WebsocketService {
         this.connectedWebsocketClients.delete(socket);
     }
 
-    public emitMessageToClients(message: string) {
+    public emitMessageToClients(message: any) {
+        console.log(message)
         this.connectedWebsocketClients.forEach(client => {
             client.emit('message', message);
             console.log(`Message sent to: ${client.id}`)

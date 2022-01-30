@@ -11,7 +11,7 @@ export class AppService {
     return { message: 'Welcome to api!' };
   }
 
-  async publishEvent(message: string) {
+  async publishEvent(message: any) {
     this.client.emit('message', message);
   }
 }

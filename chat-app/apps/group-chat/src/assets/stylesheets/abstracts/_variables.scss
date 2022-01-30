@@ -2,10 +2,6 @@
 // This file contains all application-wide Sass variables.
 // -----------------------------------------------------------------------------
 
-
-
-
-
 /// Regular font family
 /// @type List
 $text-font-stack: 'Open Sans', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif !default;
@@ -13,10 +9,6 @@ $text-font-stack: 'Open Sans', 'Helvetica Neue Light', 'Helvetica Neue', 'Helvet
 /// Code (monospace) font family
 /// @type List
 $code-font-stack: 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Monaco', monospace !default;
-
-
-
-
 
 /// Copy text color
 /// @type Color
@@ -38,35 +30,55 @@ $mid-grey: rgb(153, 153, 153) !default;
 /// @type Color
 $dark-grey: rgb(68, 68, 68) !default;
 
-
 // COLORS
-$sun: #ECB920;
-$bordo: #9E301F;
-$turquoise: #079AB0;
-
-
-
-
-
+$sun: #ecb920;
+$bordo: #9e301f;
+$turquoise: #079ab0;
+$sasank: #dbdcdd;
+$white: #ffffff;
+$error: #f25f5f;
+$lapalma: #5aab30;
+$chinesesilver: #c7c7c7;
+$nobel: #979797;
 
 
 /// Container's maximum width
 /// @type Length
 $max-width: 1180px !default;
 
-
-
-
-
 /// Breakpoints map
 /// @prop {String} keys - Keys are identifiers mapped to a given length
 /// @prop {Map} values - Values are actual breakpoints expressed in pixels
 
-$breakpoints: (small: 320px, small_plus: 576px, medium: 768px, large: 1024px, large_plus: 1400px);
+$breakpoints: (
+  'xs': 320px,
+  'xs+': 350px,
+  'sm-': 400px,
+  'sm': 480px,
+  'sm+': 576px,
+  'sm++': 610px,
+  'md--': 650px,
+  'md-': 720px,
+  'md': 768px,
+  'md+': 840px,
+  'lg-': 960px,
+  'lg': 1024px,
+  'lg+': 1280px,
+  'lg++': 1400px,
+  'xl-': 1600px,
+  'xl': 1920px,
+);
 
+$rem: 16px;
 
-
-
+// Margins
+$mxxs: $rem / 3;
+$mxs: $rem / 2;
+$msm: $rem * 0.67;
+$mrg: $rem;
+$mmd: $rem * 1.5;
+$mlg: $rem * 2;
+$mxl: $rem * 3;
 
 /// Relative or absolute URL where all assets are served from
 /// @type String

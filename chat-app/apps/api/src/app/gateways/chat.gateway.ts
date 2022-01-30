@@ -42,6 +42,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
       }
 
     } catch (e) {
+      client.disconnect();
       console.log(e)
     }
   }
@@ -52,7 +53,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
 
 
   @SubscribeMessage('message')
-  listenForMessages(@MessageBody() data: string, @ConnectedSocket() client: Socket) {
+  listenForMessages(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     this.appService.publishEvent(data)
   }
 }
