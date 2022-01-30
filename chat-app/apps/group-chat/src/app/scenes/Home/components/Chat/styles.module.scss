@@ -1,0 +1,53 @@
+@import '~stylesheets/abstracts';
+
+.wrapper {
+  font-family: Roboto;
+  height: 100%;
+  padding: 12px;
+
+  .messagesWrapper {
+
+    flex: 1;
+    display: flex;
+    overflow: scroll;
+    flex-direction: column;
+    padding-top: 12px;
+    height: 85%;
+  }
+
+  .inputFormWrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .chatHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $white;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    flex-basis: 20px;
+    padding-bottom: 11px;
+
+    > i {
+      font-size: 20px;
+      color: $nobel;
+      cursor: pointer;
+    }
+  }
+
+  .separator {
+    border-bottom: 1px solid #282527;
+    position: absolute;
+    top: 49px;
+    right: 0px;
+    width: 100%;
+    @include media('>=xl-') {
+      top: 45px;
+    }
+  }
+}

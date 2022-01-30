@@ -1,0 +1,70 @@
+.wrapper {
+  height: 40px;
+  background: rgba(27, 23, 23, 0.6);
+  color: white;
+
+  display: flex;
+  flex-direction: row;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  justify-content: space-between;
+  .email {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px;
+    letter-spacing: 0em;
+    text-align: left;
+
+    span {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 14px;
+      letter-spacing: 0em;
+      text-align: left;
+    }
+  }
+
+  .appTitle {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 19px;
+    /* identical to box height */
+
+    font-variant: small-caps;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logout {
+    display: flex;
+    align-items: center;
+
+    a{
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 14px;
+        /* identical to box height */
+
+        text-decoration: none;
+    
+        color: #ffffff;
+    }
+   
+  }
+}

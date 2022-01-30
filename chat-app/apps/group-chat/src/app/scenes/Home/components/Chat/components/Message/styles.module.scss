@@ -1,0 +1,51 @@
+@import '~stylesheets/abstracts';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  font-size: 14px;
+
+  img {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.messageBody {
+  display: flex;
+}
+
+.avatarContainer {
+  padding-right: 8px;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageHeader {
+  display: flex;
+  padding-bottom: 1px;
+  align-items: center;
+}
+
+.messageText {
+  color: $sasank;
+  line-height: 21px;
+  overflow-wrap: anywhere;
+}
+
+.playerName {
+  color: $white;
+  line-height: 16px;
+  padding-right: 8px;
+}
+
+.sentDate {
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 14px;
+  color: #73767c;
+}

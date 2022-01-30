@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-// import Signup from "./Signup"
-// import { AuthProvider } from "./contexts/AuthContext"
-import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom';
-// import Dashboard from "./Dashboard"
-import Login from './Login';
-import Home from './Home';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { AuthContextProvider, useAuthState } from './contexts/FirebaseContext';
-import Logout from './Logout';
-import Register from './Register';
 
 import './index.scss';
-
-// import PrivateRoute from "./PrivateRoute"
-// import ForgotPassword from "./ForgotPassword"
-// import UpdateProfile from "./UpdateProfile"
+import { Home } from 'scenes/Home';
+import { Login } from 'scenes/Login';
+import { Logout } from './scenes/Logout';
+import { Register } from './scenes/Register';
 
 const AuthenticatedRoute = ({ component: C, ...props }) => {
   const { isAuthenticated } = useAuthState();

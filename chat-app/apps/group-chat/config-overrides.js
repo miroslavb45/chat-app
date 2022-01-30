@@ -11,6 +11,9 @@ module.exports = override(
     stylesheets: path.resolve('src/assets', 'stylesheets'),
     images: path.resolve('src/assets', 'images'),
     fonts: path.resolve('src/assets', 'fonts'),
-    components: path.resolve('src/components', 'components'),
+    shared: path.resolve('src/app', 'shared'),
+    scenes: path.resolve('src/app', 'scenes'),
+    constants: path.resolve('src', 'constants'),
+    utils: path.resolve('src', 'utils')
   })
 );
