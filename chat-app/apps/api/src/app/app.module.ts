@@ -1,10 +1,13 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { forwardRef, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { FirebaseService } from './auth/auth.service';
 import { PreauthMiddleware } from './auth/preauth.middleware';
 import { CONFIG } from './config/config-provider';
+import { ChatGateway } from './gateways/chat.gateway';
+import { WebsocketService } from './services/websocket.service';
 
 
 @Module({
@@ -19,7 +22,7 @@ import { CONFIG } from './config/config-provider';
     ])
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway, FirebaseService, WebsocketService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

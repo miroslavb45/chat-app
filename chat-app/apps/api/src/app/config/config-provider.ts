@@ -43,5 +43,5 @@ export const CONFIG = {
     database: parseInt(getEnv('REDIS_DATABASE'), 10) || 0,
     connectTimeout: 2000
   },
-  port: 3200
+  port: 80
 };

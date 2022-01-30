@@ -1,26 +1,19 @@
 import { Controller, Get, Req } from '@nestjs/common';
-import { EventPattern, MessagePattern } from '@nestjs/microservices';
+import { EventPattern } from '@nestjs/microservices';
 
-import { AppService } from './app.service';
+import { WebsocketService } from './services/websocket.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(private websocketService: WebsocketService) { }
 
-  // @Get('/hello')
-  // getData(@Req() request: Request): string {
-  //   return 'Hello ' + request['user']?.email + '!';
-  // }
-
-
-  //This works
-  @Get("/message")
-  async publishEvent() {
-    this.appService.publishEvent();
+  @Get('/hello')
+  getData(@Req() request: Request): string {
+    return 'Hello ' + request['user']?.email + '!';
   }
 
   @EventPattern('message')
   async pubSubMessageHandler(data: Record<string, unknown>) {
-    console.log(data);
+    this.websocketService.emitMessageToClients(data.message as string);
   }
 }
