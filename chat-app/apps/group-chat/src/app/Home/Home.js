@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Topbar from '../Topbar';
 import { getAuth } from 'firebase/auth';
+import Chat from '../Chat';
 
 export default class Home extends Component {
   state = {
     username: null,
   };
   async componentDidMount() {
-    const url = 'http://localhost:3200/api/hello';
+    const url = 'http://api.localhost/api/hello';
 
     const auth = getAuth();
 
@@ -29,6 +30,7 @@ export default class Home extends Component {
       <div>
         <Topbar />
         Hello {this.state.username}
+        <Chat />
       </div>
     );
   }

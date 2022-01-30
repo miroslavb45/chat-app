@@ -5,7 +5,7 @@ docker-compose -f build/docker-compose/docker-compose.dev.yaml --env-file ./.env
 docker network rm network-1
 docker network create network-1
 
-docker-compose -f build/docker-compose/docker-compose.dev.yaml --env-file ./.env up -d --build;
+docker-compose -f build/docker-compose/docker-compose.dev.yaml --env-file ./.env up -d --build --scale api=2;
 
 echo "\n\n ____";
 echo " DEV environment";
