@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { Req, UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -33,9 +33,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
 
     try {
       if (client?.handshake?.auth?.jwt) {
-        await this.authService.validateToken(client.handshake.auth.jwt);
+        const auth = await this.authService.validateToken(client.handshake.auth.jwt);
 
         this.websocketService.addSocket(client);
+        this.appService.publishEvent({ type: 'ParticipantJoined', participant: { email: auth["email"] } })
       } else {
         console.log("Client disconnected")
         client.disconnect(true);

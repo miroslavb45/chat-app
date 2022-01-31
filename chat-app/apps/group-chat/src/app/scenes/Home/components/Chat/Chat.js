@@ -22,7 +22,7 @@ export default class Chat extends Component {
     const jwt = await this.state.user.currentUser.getIdToken();
     this.setState({ websocket: new io(`http://api.localhost`, { auth: { jwt }, transports: ['websocket'] }) }, () => {
       this.state.websocket.on('message', (message) => {
-        this.setState({ messages: [...this.state.messages, message] });
+        if (message.type === 'ChatMessage') this.setState({ messages: [...this.state.messages, message] });
       });
     });
   }
@@ -45,6 +45,7 @@ export default class Chat extends Component {
               this.state.websocket.emit('message', {
                 message: e,
                 username: this.state.user.currentUser.email.split('@')[0],
+                type: 'ChatMessage',
               });
             }}
           ></MessageInput>
