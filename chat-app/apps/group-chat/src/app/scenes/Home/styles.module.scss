@@ -1,8 +1,12 @@
 @import '~stylesheets/abstracts';
 
+.componentsWrapper{
+  display: flex;
+}
 .wrapper {
   height: 100vh;
   background-size: cover;
+
 
   //////////////////
 

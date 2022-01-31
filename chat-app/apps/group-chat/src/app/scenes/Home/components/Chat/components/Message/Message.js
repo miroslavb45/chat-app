@@ -14,7 +14,7 @@ export const Message = (props) => {
     <div onClick={() => onSendMessage({ message: message.message, id: message.id })} className={styles.wrapper}>
       <div className={styles.messageBody}>
         <div className={styles.avatarContainer}>
-          <img src={avatar} alt="Avatar" />
+          <img src={`https://i.pravatar.cc/150?u=${message.username}`} alt="Avatar" />
         </div>
         <div className={styles.messageContainer}>
           <div className={styles.messageHeader}>
