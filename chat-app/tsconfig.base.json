@@ -1,21 +1,28 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es2017",
+    "declaration": true,
+    "noImplicitAny": false,
+    "removeComments": true,
     "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["es7"],
+    "sourceMap": true,
+    "outDir": "./dist",
+    "noEmitOnError": true,
     "baseUrl": ".",
-    "paths": {},
-    "resolveJsonModule": true
+    "types": ["node", "jest"],
+    "paths": {
+      "@chat-app/dbal": ["libs/dbal/index.ts"],
+      "@chat-app/entity-repository": ["libs/entity-repository/src/index.ts"],
+      "@chat-app/shared/config": ["libs/shared/config/src/index.ts"],
+      "@chat-app/utils": ["libs/utils/src/index.ts"]
+    }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp", "dist"]
 }

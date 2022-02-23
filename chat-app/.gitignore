@@ -5,8 +5,11 @@
 /tmp
 /out-tsc
 
+.temp
+
 # dependencies
 /node_modules
+node_modules
 
 # IDEs and editors
 /.idea
@@ -39,4 +42,4 @@ testem.log
 Thumbs.db
 
 
-/apps/group-chat/node_modules
+/packages/group-chat/node_modules

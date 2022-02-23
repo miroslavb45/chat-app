@@ -2,18 +2,19 @@
   "version": 2,
   "projects": {
     "api": {
-      "root": "apps/api",
-      "sourceRoot": "apps/api/src",
+      "root": "packages/api",
+      "sourceRoot": "packages/api/src",
       "projectType": "application",
+      "prefix": "api",
       "targets": {
         "build": {
           "executor": "@nrwl/node:build",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/apps/api",
-            "main": "apps/api/src/main.ts",
-            "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "outputPath": "dist/packages/api",
+            "main": "packages/api/src/main.ts",
+            "tsConfig": "packages/api/tsconfig.app.json",
+            "assets": ["packages/api/src/assets"]
           },
           "configurations": {
             "production": {
@@ -22,8 +23,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/api/src/environments/environment.ts",
-                  "with": "apps/api/src/environments/environment.prod.ts"
+                  "replace": "packages/api/src/environments/environment.ts",
+                  "with": "packages/api/src/environments/environment.prod.ts"
                 }
               ]
             }
@@ -39,31 +40,75 @@
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["apps/api/**/*.ts"]
+            "lintFilePatterns": ["packages/api/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
+          "outputs": ["coverage/packages/api"],
           "options": {
-            "jestConfig": "apps/api/jest.config.js",
+            "jestConfig": "packages/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "dbal": {
+      "root": "libs/dbal",
+      "sourceRoot": "libs/dbal/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/dbal/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/dbal"],
+          "options": {
+            "jestConfig": "libs/dbal/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "entity-repository": {
+      "root": "libs/entity-repository",
+      "sourceRoot": "libs/entity-repository/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/entity-repository/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/entity-repository"],
+          "options": {
+            "jestConfig": "libs/entity-repository/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
     "group-chat": {
-      "root": "apps/group-chat",
-      "sourceRoot": "apps/group-chat/src",
+      "root": "packages/group-chat",
+      "sourceRoot": "packages/group-chat/src",
       "projectType": "application",
       "targets": {
         "build": {
           "executor": "@nrwl/workspace:run-commands",
-          "outputs": ["dist/apps/group-chat"],
+          "outputs": ["dist/packages/group-chat"],
           "options": {
             "command": "node ../../node_modules/.bin/react-app-rewired build",
-            "outputPath": "dist/apps/group-chat",
-            "cwd": "apps/group-chat"
+            "outputPath": "dist/packages/group-chat",
+            "cwd": "packages/group-chat"
           }
         },
         "serve": {
@@ -71,7 +116,7 @@
           "outputs": [],
           "options": {
             "command": "node ../../node_modules/.bin/react-app-rewired start",
-            "cwd": "apps/group-chat"
+            "cwd": "packages/group-chat"
           }
         },
         "lint": {
@@ -79,7 +124,7 @@
           "outputs": [],
           "options": {
             "command": "node ../../node_modules/.bin/eslint src/**/*.js",
-            "cwd": "apps/group-chat"
+            "cwd": "packages/group-chat"
           }
         },
         "test": {
@@ -87,28 +132,27 @@
           "outputs": [],
           "options": {
             "command": "node ../../node_modules/.bin/react-app-rewired test --watchAll=false",
-            "cwd": "apps/group-chat"
+            "cwd": "packages/group-chat"
           }
         },
-          "configurations": {
-            "ci": {
-              "quiet": true
-            }
+        "configurations": {
+          "ci": {
+            "quiet": true
           }
         }
-      
+      }
     },
     "group-chat-e2e": {
-      "root": "apps/group-chat-e2e",
-      "sourceRoot": "apps/group-chat-e2e/src",
+      "root": "packages/group-chat-e2e",
+      "sourceRoot": "packages/group-chat-e2e/src",
       "projectType": "application",
       "targets": {
         "e2e": {
           "executor": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/group-chat-e2e/cypress.json",
+            "cypressConfig": "packages/group-chat-e2e/cypress.json",
             "devServerTarget": "group-chat:serve",
-            "tsConfig": "apps/group-chat-e2e/tsconfig.json"
+            "tsConfig": "packages/group-chat-e2e/tsconfig.json"
           },
           "configurations": {
             "production": {
@@ -120,7 +164,58 @@
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["apps/group-chat-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": ["packages/group-chat-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "shared-config": {
+      "root": "libs/shared/config",
+      "sourceRoot": "libs/shared/config/src",
+      "projectType": "library",
+      "generators": {},
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/config/**/*.ts",
+              "libs/shared/config/**/*.spec.ts",
+              "libs/shared/config/**/*.spec.tsx",
+              "libs/shared/config/**/*.spec.js",
+              "libs/shared/config/**/*.spec.jsx",
+              "libs/shared/config/**/*.d.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/config/jest.config.js",
+            "passWithNoTests": true
+          },
+          "outputs": ["coverage/libs/shared/config"]
+        }
+      }
+    },
+    "utils": {
+      "root": "libs/utils",
+      "sourceRoot": "libs/utils/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/utils"],
+          "options": {
+            "jestConfig": "libs/utils/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }
