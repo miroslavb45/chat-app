@@ -1,5 +1,9 @@
 {
   "npmScope": "chat-app",
+  "workspaceLayout": {
+    "appsDir": "packages",
+    "libsDir": "libs"
+  },
   "affected": {
     "defaultBase": "master"
   },
@@ -29,14 +33,26 @@
   },
   "projects": {
     "api": {
+      "tags": ["platform:server", "type:app"]
+    },
+    "dbal": {
+      "tags": ["platform:server", "type:lib"]
+    },
+    "entity-repository": {
       "tags": []
     },
     "group-chat": {
-      "tags": []
+      "tags": ["platform:server", "type:app"]
     },
     "group-chat-e2e": {
       "tags": [],
       "implicitDependencies": ["group-chat"]
+    },
+    "shared-config": {
+      "tags": ["type:lib", "lib:shared"]
+    },
+    "utils": {
+      "tags": []
     }
   }
 }
