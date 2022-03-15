@@ -6,7 +6,17 @@ module.exports = override(
     test: /\.worker\.js$/,
     use: { loader: 'worker-loader' },
   }),
-
+  addWebpackModuleRule({
+    test: /\.js$/,
+    include: /node_modules/,
+    type: 'javascript/auto',
+  }),
+  addWebpackModuleRule({
+    test: /\.esm.js/,
+    resolve: {
+      fullySpecified: false,
+    },
+  }),
   addWebpackAlias({
     stylesheets: path.resolve('src/assets', 'stylesheets'),
     images: path.resolve('src/assets', 'images'),
@@ -14,6 +24,6 @@ module.exports = override(
     shared: path.resolve('src/app', 'shared'),
     scenes: path.resolve('src/app', 'scenes'),
     constants: path.resolve('src', 'constants'),
-    utils: path.resolve('src', 'utils')
+    utils: path.resolve('src', 'utils'),
   })
 );
