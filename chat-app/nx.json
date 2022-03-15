@@ -35,6 +35,9 @@
     "api": {
       "tags": ["platform:server", "type:app"]
     },
+    "shared-auth": {
+      "tags": ["type:lib", "lib:shared"]
+    },
     "dbal": {
       "tags": ["platform:server", "type:lib"]
     },

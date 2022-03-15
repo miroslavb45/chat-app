@@ -35,26 +35,26 @@ services:
       - "80:80"
     networks:
       - network-1
-  # group-chat:
-  #   build:
-  #     context: "../../"
-  #     dockerfile: ./build/docker/react/Dockerfile.dev
-  #     args:
-  #       PACKAGE: "group-chat"
-  #   networks:
-  #     - network-1
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - api
-  #   environment:
-  #     NODE_ENV: "development"
-  #     DANGEROUSLY_DISABLE_HOST_CHECK: "true"
-  #   volumes:
-  #     - "../../packages:/usr/src/app/packages:delegated"
-  #     - "../../dist:/usr/src/app/dist:delegated"
-  #     - "../../package.json:/usr/src/app/package.json:delegated"
-  #     - "../../node_modules:/usr/src/app/node_modules:delegated"
+  group-chat:
+    build:
+      context: "../../"
+      dockerfile: ./build/docker/react/Dockerfile.dev
+      args:
+        PACKAGE: "group-chat"
+    networks:
+      - network-1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      NODE_ENV: "development"
+      DANGEROUSLY_DISABLE_HOST_CHECK: "true"
+    volumes:
+      - "../../packages:/usr/src/app/packages:delegated"
+      - "../../dist:/usr/src/app/dist:delegated"
+      - "../../package.json:/usr/src/app/package.json:delegated"
+      - "../../node_modules:/usr/src/app/node_modules:delegated"
 
   redis:
     image: redis:5.0-alpine

@@ -3,12 +3,13 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { FirebaseService } from './auth/auth.service';
-import { PreauthMiddleware } from './auth/preauth.middleware';
+import { FirebaseService } from '@chat-app/shared/auth';
+import { PreauthMiddleware } from '@chat-app/shared/auth';
 import { CONFIG } from '@chat-app/shared/config';
 import { ChatGateway } from './gateways/chat.gateway';
 import { WebsocketService } from './services/websocket.service';
-import { EntityRepositoryModule, WorkspaceRepository } from '@chat-app/entity-repository';
+import { EntityRepositoryModule, UserRepository, WorkspaceRepository } from '@chat-app/entity-repository';
+import { WorkspaceController } from './rest-api/workspace/workspace.controller';
 
 
 @Module({
@@ -24,8 +25,8 @@ import { EntityRepositoryModule, WorkspaceRepository } from '@chat-app/entity-re
     ]),
     EntityRepositoryModule
   ],
-  controllers: [AppController],
-  providers: [AppService, ChatGateway, FirebaseService, WebsocketService, WorkspaceRepository],
+  controllers: [AppController, WorkspaceController],
+  providers: [AppService, ChatGateway, FirebaseService, WebsocketService, WorkspaceRepository, UserRepository],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

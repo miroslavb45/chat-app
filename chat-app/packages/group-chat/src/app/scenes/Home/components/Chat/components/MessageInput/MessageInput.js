@@ -91,7 +91,7 @@ export class MessageInput extends Component {
             style={{ height: textAreaHeight }}
           ></textarea>
           <button type="submit" className={cn(styles.sendButton)}>
-            <i class="fas fa-share"></i>
+            <i className="fas fa-share"></i>
           </button>
         </form>
 

@@ -52,5 +52,17 @@ export const CONFIG = {
       // poolSize: 10
     }
   },
+  firebase: {
+    type: getEnv('FIREBASE_TYPE'),
+    projectId: getEnv('FIREBASE_PROJECT_ID'),
+    privateKeyId: getEnv('FIREBASE_PRIVATE_KEY_ID'),
+    privateKey: getEnv('FIREBASE_PRIVATE_KEY'),
+    clientEmail: getEnv('FIREBASE_CLIENT_EMAIL'),
+    clientId: getEnv('FIREBASE_CLIENT_ID'),
+    authUri: getEnv('FIREBASE_AUTH_URI'),
+    tokenUri: getEnv('FIREBASE_TOKEN_URI'),
+    authProviderX509CertUrl: getEnv('FIREBASE_AUTH_PROVIDER_X508_CERT_URL'),
+    clientX509CertUrl: getEnv('FIREBASE_CLIENT_X509_CERT_URL'),
+  },
   port: 80
 };

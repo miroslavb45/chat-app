@@ -21,6 +21,7 @@
       "@chat-app/dbal": ["libs/dbal/index.ts"],
       "@chat-app/entity-repository": ["libs/entity-repository/src/index.ts"],
       "@chat-app/shared/config": ["libs/shared/config/src/index.ts"],
+      "@chat-app/shared/auth": ["libs/shared/auth/src/index.ts"],
       "@chat-app/utils": ["libs/utils/src/index.ts"]
     }
   },

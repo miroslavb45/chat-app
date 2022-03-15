@@ -8,6 +8,11 @@ import { Login } from 'scenes/Login';
 import { Logout } from './scenes/Logout';
 import { Register } from './scenes/Register';
 
+import { Provider } from 'react-redux';
+import configureStore from './store';
+
+export const store = configureStore();
+
 const AuthenticatedRoute = ({ component: C, ...props }) => {
   const { isAuthenticated } = useAuthState();
   console.log(`Is Authenticated: ${isAuthenticated}`);
@@ -25,17 +30,16 @@ const UnauthenticatedRoute = ({ component: C, ...props }) => {
 class app extends Component {
   render() {
     return (
-      <div>
+      <Provider store={store}>
         <AuthContextProvider>
           <Router>
             <UnauthenticatedRoute exact path="/login" component={Login} />
             <UnauthenticatedRoute exact path="/register" component={Register} />
             <AuthenticatedRoute exact path="/" component={Home} />
             <AuthenticatedRoute path="/logout" component={Logout} />
-            {/* <UnauthenticatedRoute exact path="/signup" component={SignUp} /> */}
           </Router>
         </AuthContextProvider>
-      </div>
+      </Provider>
     );
   }
 }

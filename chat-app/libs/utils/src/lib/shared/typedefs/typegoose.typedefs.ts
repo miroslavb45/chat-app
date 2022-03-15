@@ -1,4 +1,5 @@
 import { Ref } from '@typegoose/typegoose';
-import * as mongoose from 'mongoose';
+import { Types } from 'mongoose';
 
-export type Reference<T> = Ref<T> | mongoose.Types.ObjectId;
+
+export type Reference<T> = Ref<T> | Types.ObjectId;

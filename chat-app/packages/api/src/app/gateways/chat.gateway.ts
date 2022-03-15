@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { AppService } from '../app.service';
-import { FirebaseService } from '../auth/auth.service';
+import { FirebaseService } from '@chat-app/shared/auth';
 import { WebsocketService } from '../services/websocket.service';
 
 

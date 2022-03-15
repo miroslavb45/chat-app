@@ -1,6 +1,6 @@
 import { WorkspaceRepository } from '@chat-app/entity-repository';
 // import { WorkspaceRepository } from '@chat-app/entity-repository';
-import { Controller, Get, Inject, Req } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
 
 import { WebsocketService } from './services/websocket.service';
@@ -11,14 +11,6 @@ export class AppController  {
 
   @Get('/hello')
   public getData(@Req() request: any): string {
-    return 'Hello ' + request['user']?.email + '!';
-  }
-
-  @Get('/workspace')
-  public addWorkspace(@Req() request: any): string {
-    void this.workspaceRepository.create({
-      name: 'WorkspaceSample'
-    })
     return 'Hello ' + request['user']?.email + '!';
   }
 

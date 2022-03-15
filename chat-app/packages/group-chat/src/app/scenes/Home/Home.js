@@ -11,8 +11,10 @@ import styles from './styles.module.scss';
 import { VideoChat } from './components/VideoChat';
 import { VideoChatList } from './components/Chat/components/VideoChatList';
 import { io } from 'socket.io-client';
+import { getWorkspaces } from './actions';
+import { connect } from 'react-redux';
 
-export default class Home extends Component {
+class Home extends Component {
   state = {
     isChatOpen: true,
     username: null,
@@ -25,11 +27,14 @@ export default class Home extends Component {
   };
 
   async componentDidMount() {
+    const { dispatch } = this.props;
     const auth = getAuth();
+    const jwt = await auth.currentUser.getIdToken();
+
+    dispatch(getWorkspaces());
 
     this.setState({ user: auth.currentUser });
 
-    const jwt = await auth.currentUser.getIdToken();
     this.setState({ websocket: new io(`http://api.localhost`, { auth: { jwt }, transports: ['websocket'] }) }, () => {
       this.state.websocket.on('message', (message) => {
         if (message.type === 'ParticipantJoined')
@@ -114,15 +119,24 @@ export default class Home extends Component {
           <div className={styles.videoChatListWrapper}>
             <VideoChatList
               onUserCall={this.handleUserCall}
-              participants={[...new Set(this.state.participants.map((item) => { console.log(item.email); return item.email }))]}
+              participants={[
+                ...new Set(
+                  this.state.participants.map((item) => {
+                    console.log(item.email);
+                    return item.email;
+                  })
+                ),
+              ]}
             />
           </div>
 
           {/* <div className={styles.videoChatWrapper}> */}
-            <VideoChat partnerPeerId={this.state.selectedUserEmail?.split('@')[0]} />
+          <VideoChat partnerPeerId={this.state.selectedUserEmail?.split('@')[0]} />
           {/* </div> */}
         </div>
       </div>
     );
   }
 }
+
+export default connect()(Home);

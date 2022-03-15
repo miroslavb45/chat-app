@@ -1,13 +1,13 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { FirebaseService } from './auth.service';
+import { FirebaseService } from './firebase.service';
 
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
 
     private defaultApp: any;
 
-    constructor(readonly firebaseService: FirebaseService) {
+    public constructor(readonly firebaseService: FirebaseService) {
         this.defaultApp = firebaseService.getDefaultApp();
     }
 
@@ -27,8 +27,7 @@ export class PreauthMiddleware implements NestMiddleware {
                     this.accessDenied(req.url, res);
                 });
         } else {
-            // this.accessDenied(req.url, res); 
-            next();
+            this.accessDenied(req.url, res); 
         }
     }
 
