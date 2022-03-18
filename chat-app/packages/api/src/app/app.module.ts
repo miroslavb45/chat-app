@@ -3,13 +3,17 @@ import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/c
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { FirebaseService } from '@chat-app/shared/auth';
+import { AuthService, FirebaseService } from '@chat-app/shared/auth';
 import { PreauthMiddleware } from '@chat-app/shared/auth';
 import { CONFIG } from '@chat-app/shared/config';
 import { ChatGateway } from './gateways/chat.gateway';
 import { WebsocketService } from './services/websocket.service';
 import { EntityRepositoryModule, UserRepository, WorkspaceRepository } from '@chat-app/entity-repository';
 import { WorkspaceController } from './rest-api/workspace/workspace.controller';
+import { RegisterController } from './rest-api/register/register.controller';
+import { WorkspaceService } from './services/workspace.service';
+import { UserController } from './rest-api/user/user.controller';
+import { UserService } from './services/user.service';
 
 
 @Module({
@@ -25,12 +29,14 @@ import { WorkspaceController } from './rest-api/workspace/workspace.controller';
     ]),
     EntityRepositoryModule
   ],
-  controllers: [AppController, WorkspaceController],
-  providers: [AppService, ChatGateway, FirebaseService, WebsocketService, WorkspaceRepository, UserRepository],
+  controllers: [AppController, WorkspaceController, RegisterController, UserController],
+  providers: [AppService, AuthService, ChatGateway, FirebaseService, WebsocketService, WorkspaceService, UserService, WorkspaceRepository, UserRepository],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(PreauthMiddleware).forRoutes({
+    consumer.apply(PreauthMiddleware).exclude(
+      { path: 'api/register', method: RequestMethod.POST },
+    ).forRoutes({
       path: '*', method: RequestMethod.ALL
     });
   }

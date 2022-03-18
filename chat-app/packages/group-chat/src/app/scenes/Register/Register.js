@@ -7,8 +7,10 @@ import icon from 'images/icon.png';
 
 import styles from './styles.module.scss';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { registerUser } from './actions';
 
-export default class Register extends Component {
+class Register extends Component {
   constructor() {
     super();
     this.state = {
@@ -43,6 +45,7 @@ export default class Register extends Component {
     const auth = getAuth();
     try {
       await createUserWithEmailAndPassword(auth, this.state.username, this.state.password);
+      this.props.dispatch(registerUser({ email: this.state.username.toLowerCase() }));
     } catch (e) {
       this.setState({ inputErrors: true });
     }
@@ -101,3 +104,5 @@ export default class Register extends Component {
     );
   }
 }
+
+export default connect()(Register);

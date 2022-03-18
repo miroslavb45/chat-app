@@ -11,8 +11,8 @@ import styles from './styles.module.scss';
 import { VideoChat } from './components/VideoChat';
 import { VideoChatList } from './components/Chat/components/VideoChatList';
 import { io } from 'socket.io-client';
-import { getWorkspaces } from './actions';
 import { connect } from 'react-redux';
+import { getWorkspaceAction } from '../Workspace/actions';
 
 class Home extends Component {
   state = {
@@ -31,9 +31,9 @@ class Home extends Component {
     const auth = getAuth();
     const jwt = await auth.currentUser.getIdToken();
 
-    dispatch(getWorkspaces());
-
+    
     this.setState({ user: auth.currentUser });
+    dispatch(getWorkspaceAction());
 
     this.setState({ websocket: new io(`http://api.localhost`, { auth: { jwt }, transports: ['websocket'] }) }, () => {
       this.state.websocket.on('message', (message) => {
