@@ -17,6 +17,8 @@ services:
         PACKAGE: "api"
     networks:
       - network-1
+    ports:
+      - "9200:7777"
     volumes:
       - "../../node_modules:/usr/src/app/node_modules:delegated"
       - "../../packages:/usr/src/app/packages:delegated"

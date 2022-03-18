@@ -8,12 +8,16 @@ export default function () {
       const isRestAction = action.type.startsWith('REQUEST');
 
       if (isRestAction) {
+
         const auth = getAuth();
-        const jwt = await auth.currentUser.getIdToken();
+        const jwt = await auth?.currentUser?.getIdToken();
 
         if (jwt) {
-          const { url, method } = action.payload;
-          const apiUrl = `http://api.localhost/api/${url}`;
+          console.log(action)
+
+          const { url, method, queryParams } = action.payload;
+          const serializedQueryParams = new URLSearchParams(queryParams);
+          const apiUrl = `http://api.localhost/api/${url}${serializedQueryParams ? `?${serializedQueryParams}`  : ''}`;
 
           const options = {
             method: method,
@@ -22,16 +26,17 @@ export default function () {
             },
           };
           fetch(apiUrl, options)
-            .then((response) => response.json())
+            .then((response) => response.json()).catch(() => { })
             .then((payload) => {
               store.dispatch(action.payload.success(payload));
             })
             .catch((err) => {
+              console.log(err)
               store.dispatch(action.payload.error(err));
             });
         }
       }
-     
+
       return next(action);
     };
   };

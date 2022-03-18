@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { getAuth, signOut } from '@firebase/auth'
+import { connect } from 'react-redux';
+import { unselectWorkspaceAction } from '../Workspace/actions';
+import { getUserInfoAction } from '../Login/actions';
 
 
-export default class Logout extends Component {
+class Logout extends Component {
   componentDidMount() {
+    this.props.dispatch(unselectWorkspaceAction())
+
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        console.log('Signed out successfully.');
+        // console.log('Signed out successfully.');
       })
       .catch((error) => {
         // An error happened.
@@ -19,3 +24,6 @@ export default class Logout extends Component {
     return <div>Logout</div>;
   }
 }
+
+
+export default connect()(Logout);

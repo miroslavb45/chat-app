@@ -1,6 +1,8 @@
 import { getAuth, onAuthStateChanged } from '@firebase/auth'
 import { initializeApp } from 'firebase/app'
 import { useState, useEffect, useContext, createContext } from 'react'
+import { store } from '../app'
+import { getUserInfo, getUserInfoAction } from '../scenes/Login/actions'
 
 export const firebaseApp = initializeApp({
   apiKey: "AIzaSyD2qJKSLoVaqwQwsO4PwR3elzxTUoHUrds",
@@ -18,7 +20,18 @@ export const AuthContextProvider = props => {
   const [error, setError] = useState()
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), setUser, setError)
+    const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
+      setUser(user);
+
+      if(user){
+
+        console.log('Auth available.');
+        store.dispatch(getUserInfoAction());
+      } else {
+        console.log('Auth NOT available.');
+      }
+
+    }, setError)
     return () => unsubscribe()
   }, [])
   return <AuthContext.Provider value={{ user, error }} {...props} />

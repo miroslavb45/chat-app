@@ -14,5 +14,10 @@ export class User extends BaseSchema<User>{
   })
   public workspaces?: Reference<Workspace>[];
 
+  @prop({
+    required: false
+  })
+  public activeWorkspace?: Reference<Workspace>;
+
 }
 

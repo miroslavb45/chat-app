@@ -1,5 +1,6 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { AuthService } from './auth.service';
 import { FirebaseService } from './firebase.service';
 
 @Injectable()
@@ -7,7 +8,7 @@ export class PreauthMiddleware implements NestMiddleware {
 
     private defaultApp: any;
 
-    public constructor(readonly firebaseService: FirebaseService) {
+    public constructor(readonly firebaseService: FirebaseService, readonly authService: AuthService) {
         this.defaultApp = firebaseService.getDefaultApp();
     }
 
@@ -21,13 +22,21 @@ export class PreauthMiddleware implements NestMiddleware {
                         email: decodedToken.email
                     }
                     req['user'] = user;
+
+                    const dbUser = await this.authService.findUserByEmail(decodedToken.email);
+
+                    if (!dbUser) {
+                        throw new UnauthorizedException('User not found.');
+                    }
+                    req['dbUser'] = dbUser;
+
                     next();
                 }).catch(error => {
                     console.error(error);
                     this.accessDenied(req.url, res);
                 });
         } else {
-            this.accessDenied(req.url, res); 
+            this.accessDenied(req.url, res);
         }
     }
 

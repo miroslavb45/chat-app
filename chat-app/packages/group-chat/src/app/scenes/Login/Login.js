@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import background from 'images/background.png';
 import icon from 'images/icon.png';
+import { Link } from 'react-router-dom';
 
 // import { useAuth } from "../contexts/AuthContext"
 
 import styles from './styles.module.scss';
-import { Link } from 'react-router-dom';
-
-export default class Login extends Component {
+import { connect } from 'react-redux';
+import { getUserInfoAction } from './actions';
+class Login extends Component {
   constructor() {
     super();
     this.state = {
@@ -89,3 +90,5 @@ export default class Login extends Component {
     );
   }
 }
+
+export default connect()(Login);

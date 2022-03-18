@@ -1,23 +1,34 @@
 import { getAuth } from 'firebase/auth';
 import React from 'react';
+import { Component } from 'react';
+import { connect, connectAdvanced } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 
-function Topbar() {
-  const auth = getAuth();
+class Topbar extends Component {
+  constructor() {
+    super();
+    this.auth = getAuth();
 
-  return (
-    <div className={styles.wrapper}>
-      <div className={styles.email}>
-        Welcome, <span>{auth.currentUser.email}</span>
+  }
+
+  render() {
+    return (
+      <div className={styles.wrapper}>
+        <div className={styles.email}>
+          Welcome, <span>{this.auth.currentUser.email}</span>
+        </div>
+        <div className={styles.appTitle}>{this.props.workspace.name}</div>
+        <div className={styles.logout}>
+          <Link to="/logout">Logout</Link>
+        </div>
       </div>
-      <div className={styles.appTitle}>CHAT APPLICATION</div>
-      <div className={styles.logout}>
-        <Link to="/logout">Logout</Link>
-      </div>
-    </div>
-  );
+    );
+  }
 }
+const mapStateToPros = (state) => ({
+  workspace: state.selectedWorkspace
+});
 
-export default Topbar;
+export default connect(mapStateToPros)(Topbar);
