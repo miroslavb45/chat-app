@@ -34,6 +34,15 @@ export class WorkspaceRepository {
   }
 
   /**
+   * Returns a WorkspaceUser entity from the database.
+   * @param {WorkspaceUser} workspaceUser
+   * @return {Promise<void>}
+   */
+  public async getWorkspaceUser(user: Reference<User>, workspace: Reference<Workspace>): Promise<WorkspaceUser> {
+    return await this.workspaceUserModel.findOne({ workspace: workspace._id, baseUser: user._id });
+  }
+
+  /**
    * Deletes a Workspace entity frome the database.
    * @param {string} workspace
    * @return {Promise<void>}
@@ -52,6 +61,14 @@ export class WorkspaceRepository {
   }
 
   /**
+   * Returns a WorkspaceUser entity by id.
+   * @param {string} id
+   * @return {Promise<void>}
+   */
+  public async findWorkspaceUserByUserId(id: Reference<User>): Promise<WorkspaceUser> {
+    return await this.workspaceUserModel.findOne({ baseUser: id });
+  }
+  /**
    * Returns multiple Workspace entities by ids.
    * @param {string} id
    * @return {Promise<void>}
@@ -65,6 +82,15 @@ export class WorkspaceRepository {
   }
 
   /**
+   * Returns multiple Workspace entities by ids.
+   * @param {string} id
+   * @return {Promise<void>}
+   */
+  public async getChunkOfWorkspaces(chunk: number = 20, offset: number = 0, lean = true): Promise<DocumentType<Workspace>[]> {
+    return this.workspaceModel.find({}).limit(chunk).skip(offset).lean(lean);
+  }
+
+  /**
    * Returns a Workspace entity by id.
    * @param {string} name
    * @return {Promise<void>}
@@ -74,13 +100,24 @@ export class WorkspaceRepository {
   }
 
   /**
- * Updates a User entity by id and payload.
- * @param {string} name
- * @return {Promise<User>}
- */
+  * Updates a User entity by id and payload.
+  * @param {string} name
+  * @return {Promise<User>}
+  */
   public async updateById(workspace: Reference<Workspace>, payload: Partial<Workspace>): Promise<void> {
     return this.workspaceModel.findOneAndUpdate({
       _id: workspace._id.toString()
+    }, payload, { upsert: true })
+  }
+
+  /**
+   * Updates a User entity by id and payload.
+   * @param {string} name
+   * @return {Promise<User>}
+   */
+  public async updateWorkspaceUserById(workspaceUser: Reference<WorkspaceUser>, payload: Partial<WorkspaceUser>): Promise<void> {
+    return this.workspaceUserModel.findOneAndUpdate({
+      _id: workspaceUser._id.toString()
     }, payload, { upsert: true })
   }
 }

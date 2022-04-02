@@ -37,7 +37,7 @@ class Select extends Component {
   };
 
   get options() {
-    return this.props.availableWorkspaces.map((i) => ({ value: i.id, label: i.name })) || {};
+    return this.props?.availableWorkspaces.map((i) => ({ value: i.id, label: i.name })) || {};
   }
 
   render() {
@@ -78,7 +78,7 @@ class Select extends Component {
 }
 
 const mapStateToPros = (state) => ({
-  availableWorkspaces: state.availableWorkspaces,
+  availableWorkspaces: state.workspace.availableWorkspaces,
 });
 
 export default connect(mapStateToPros)(Select);

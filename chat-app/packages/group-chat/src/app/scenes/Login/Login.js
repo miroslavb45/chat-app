@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 
 import styles from './styles.module.scss';
 import { connect } from 'react-redux';
-import { getUserInfoAction } from './actions';
 class Login extends Component {
   constructor() {
     super();
@@ -18,12 +17,6 @@ class Login extends Component {
       password: 'admin123',
     };
   }
-
-  handleChange = (event) => {
-    // const passwordRegex = new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$');
-
-    console.log('asd');
-  };
 
   handlePasswordChange = (e) => {
     this.setState({ password: e.target.value });

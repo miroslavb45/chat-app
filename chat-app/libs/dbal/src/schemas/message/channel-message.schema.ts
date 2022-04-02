@@ -14,4 +14,9 @@ export class ChannelMessage extends BaseMessage {
     required: true
   })
   public author: Reference<User>;
+
+  @prop({
+    required: true
+  })
+  public username: string;
 }

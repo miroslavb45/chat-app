@@ -1,0 +1,27 @@
+.separatorWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.separator {
+  border: 1px solid #dddddd;
+  width: 100%;
+}
+
+.label {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    /* identical to box height */
+    
+    font-variant: small-caps;
+    
+
+  color: #1d1c1d;
+
+  width: 200px;
+  text-align: center;
+}

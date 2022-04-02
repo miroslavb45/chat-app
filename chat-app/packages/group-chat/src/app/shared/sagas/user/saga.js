@@ -6,15 +6,15 @@ import { navigateToSaga } from '../navigation/saga';
 function* getUserInformation(action) {
   try {
       yield put(getUserInfo());
-      const { payload: userInfo} = yield take(getUserInfoSuccess);
-      console.log(userInfo)
-        if(userInfo?.activeWorkspace){
+      const { payload: { dbUser }} = yield take(getUserInfoSuccess);
+        if(dbUser?.activeWorkspace){
             console.log("WORKSPACE SELECTED")
 
             console.log('user has an active workspace');
             yield call(navigateToSaga, '/');
         }
   } catch (e) {
+    console.log(e)
     yield put(getUserInfoError(e));
   }
 }

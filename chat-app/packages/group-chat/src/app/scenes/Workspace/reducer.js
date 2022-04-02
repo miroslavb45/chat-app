@@ -5,25 +5,25 @@ import { getWorkspacesSuccess, getWorkspaceSuccess, selectWorkspaceSuccess, unse
 
 const initialState = {
   availableWorkspaces: [],
-  selectedWorkspace: null,
+  activeWorkspace: null,
 };
 
 export default createReducer(initialState, {
   [getWorkspacesSuccess]: (state, { payload }) => {
     state.availableWorkspaces = [...payload.workspaces];
-  },  
+  },
   [getWorkspaceSuccess]: (state, { payload }) => {
-    state.selectedWorkspace = { ...payload };
+    state.activeWorkspace = { ...payload };
   },
   [selectWorkspaceSuccess]: (state, { payload }) => {
-    state.selectedWorkspace = payload.id;
+    state.activeWorkspace = payload.id;
   },
 
   [getUserInfoSuccess]: (state, { payload }) => {
-    state.selectedWorkspace = payload.activeWorkspace;
+    state.activeWorkspace = payload.dbUser.activeWorkspace;
   },
 
   [unselectWorkspaceSuccess]: (state) => {
-    state.selectedWorkspace = null;
+    state.activeWorkspace = null;
   },
 });

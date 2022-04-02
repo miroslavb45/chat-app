@@ -13,9 +13,10 @@ export class Channel extends BaseSchema<Channel>{
   public name: string;
 
   @prop({
-    required: true
+    required: true,
+    default: []
   })
-  public messages: Reference<ChannelMessage>[];
+  public messages?: Reference<ChannelMessage>[];
 
   @prop({
     required: false
@@ -26,13 +27,13 @@ export class Channel extends BaseSchema<Channel>{
     required: true,
     default: []
   })
-  public joinedUsers: Reference<User>[];
+  public joinedUsers?: Reference<User>[];
 
   @prop({
     required: true,
     default: []
   })
-  public admins: Reference<User>[];
+  public admins?: Reference<User>[];
 }
 
 

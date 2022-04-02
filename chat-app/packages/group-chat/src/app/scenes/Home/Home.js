@@ -1,18 +1,20 @@
-import React, { Component } from 'react';
-import Topbar from '../../shared/Topbar';
 import { getAuth } from 'firebase/auth';
-import { Chat } from './components/Chat';
-import { CSSTransition } from 'react-transition-group';
-import cn from 'classnames';
-
 import background from 'images/background.png';
-
-import styles from './styles.module.scss';
-import { VideoChat } from './components/VideoChat';
-import { VideoChatList } from './components/Chat/components/VideoChatList';
-import { io } from 'socket.io-client';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { connectToWebsocket } from '../../shared/services/websocket';
+import Topbar from '../../shared/Topbar';
 import { getWorkspaceAction } from '../Workspace/actions';
+import { getJoinedChannels } from './actions';
+import { Channel } from './components/Channel';
+import { CreateChannelModal } from './components/Channel/components/CreateChannelModal';
+import DeleteChannelModal from './components/Channel/components/DeleteChannelModal/DeleteChannelModal';
+import { RenameChannelModal } from './components/Channel/components/RenameChannelModal';
+import { PrivateMessage } from './components/PrivateMessage';
+import { Sidebar } from './components/Sidebar';
+import styles from './styles.module.scss';
+
+
 
 class Home extends Component {
   state = {
@@ -29,18 +31,17 @@ class Home extends Component {
   async componentDidMount() {
     const { dispatch } = this.props;
     const auth = getAuth();
-    const jwt = await auth.currentUser.getIdToken();
 
-    
     this.setState({ user: auth.currentUser });
     dispatch(getWorkspaceAction());
 
-    this.setState({ websocket: new io(`http://api.localhost`, { auth: { jwt }, transports: ['websocket'] }) }, () => {
-      this.state.websocket.on('message', (message) => {
-        if (message.type === 'ParticipantJoined')
-          this.setState({ participants: [...this.state.participants, message.participant] });
-      });
-    });
+    dispatch(
+      getJoinedChannels({
+        workspace: this.props.workspaceId,
+      })
+    );
+
+    await connectToWebsocket();
   }
 
   toggleChat = () => {
@@ -50,13 +51,41 @@ class Home extends Component {
   handleUserCall = (e) => {
     this.setState({ selectedUserEmail: e });
   };
+
+  get activeMainContent() {
+    const { activeMainContent } = this.props;
+    switch (activeMainContent?.type) {
+      case 'channel':
+        return <Channel id={activeMainContent.id} />;
+      case 'message':
+        return <PrivateMessage id={activeMainContent.id} />;
+      default:
+        return null;
+    }
+  }
   render() {
-    const { isChatOpen, chatMessages, participants, pendingMessages, user } = this.state;
+    // const { isChatOpen, chatMessages, participants, pendingMessages, user } = this.state;
     return (
       <div className={styles.wrapper} style={{ backgroundImage: `url(${background})` }}>
+        <div className={styles.overlay}></div>
         <Topbar />
+        <div className={styles.sidebarWrapper}>
+          <Sidebar></Sidebar>
+        </div>
 
-        <div className={styles.componentsWrapper}>
+        <div className={styles.mainWrapper}>{this.activeMainContent}</div>
+
+        {this.props.isModalOpen && (
+          // <div className={styles.modalWrapper}>
+          <>
+            <CreateChannelModal></CreateChannelModal>
+            <RenameChannelModal></RenameChannelModal>
+            <DeleteChannelModal></DeleteChannelModal>
+          </>
+          // </div>
+        )}
+
+        {/* <div className={styles.componentsWrapper}>
           <CSSTransition
             in={isChatOpen}
             timeout={2000}
@@ -128,15 +157,21 @@ class Home extends Component {
                 ),
               ]}
             />
-          </div>
+          </div> */}
 
-          {/* <div className={styles.videoChatWrapper}> */}
-          <VideoChat partnerPeerId={this.state.selectedUserEmail?.split('@')[0]} />
-          {/* </div> */}
-        </div>
+        {/* <div className={styles.videoChatWrapper}> */}
+        {/* <VideoChat partnerPeerId={this.state.selectedUserEmail?.split('@')[0]} /> */}
+        {/* </div> */}
+        {/* </div> */}
       </div>
     );
   }
 }
 
-export default connect()(Home);
+const mapStateToPros = (state) => ({
+  activeMainContent: state.home.activeMainContent,
+  workspaceId: state.workspace.activeWorkspace.id || state.workspace.activeWorkspace,
+  isModalOpen: state.home.isModalOpen,
+});
+
+export default connect(mapStateToPros)(Home);

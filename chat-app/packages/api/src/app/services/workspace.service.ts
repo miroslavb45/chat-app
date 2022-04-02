@@ -17,13 +17,15 @@ export class WorkspaceService {
   }
 
   public async addUserToWorkspaceById(workspace: Reference<Workspace>, user: User): Promise<void> {
-    // Attach user to the workspace
-    await this.userRepository.updateById(user, {
-      workspaces: [...user.workspaces, workspace]
-    })
+    if (!user.workspaces.includes(workspace)) {
+      // Attach user to the workspace
+      await this.userRepository.updateById(user, {
+        workspaces: [...user.workspaces, workspace._id]
+      })
 
-    // Create the WorkspaceUser
-    await this.workspaceRepository.createWorkspaceUser(user._id, workspace);
+      // Create the WorkspaceUser
+      await this.workspaceRepository.createWorkspaceUser(user._id, workspace);
+    }
   };
 
 }

@@ -172,6 +172,28 @@
         }
       }
     },
+    "shared-auth": {
+      "root": "libs/shared/auth",
+      "sourceRoot": "libs/shared/auth/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/shared/auth/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/auth"],
+          "options": {
+            "jestConfig": "libs/shared/auth/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "shared-config": {
       "root": "libs/shared/config",
       "sourceRoot": "libs/shared/config/src",
@@ -201,23 +223,23 @@
         }
       }
     },
-    "shared-auth": {
-      "root": "libs/shared/auth",
-      "sourceRoot": "libs/shared/auth/src",
+    "shared-store": {
+      "root": "libs/shared/store",
+      "sourceRoot": "libs/shared/store/src",
       "projectType": "library",
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["libs/shared/auth/**/*.ts"]
+            "lintFilePatterns": ["libs/shared/store/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/shared/auth"],
+          "outputs": ["coverage/libs/shared/store"],
           "options": {
-            "jestConfig": "libs/auth/shared/jest.config.js",
+            "jestConfig": "libs/shared/store/jest.config.js",
             "passWithNoTests": true
           }
         }

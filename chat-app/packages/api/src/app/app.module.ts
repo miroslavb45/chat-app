@@ -6,14 +6,16 @@ import { AppService } from './app.service';
 import { AuthService, FirebaseService } from '@chat-app/shared/auth';
 import { PreauthMiddleware } from '@chat-app/shared/auth';
 import { CONFIG } from '@chat-app/shared/config';
-import { ChatGateway } from './gateways/chat.gateway';
+import { WebsocketGateway } from './gateways/websocket.gateway';
 import { WebsocketService } from './services/websocket.service';
-import { EntityRepositoryModule, UserRepository, WorkspaceRepository } from '@chat-app/entity-repository';
+import { ChannelRepository, EntityRepositoryModule, UserRepository, WorkspaceRepository } from '@chat-app/entity-repository';
 import { WorkspaceController } from './rest-api/workspace/workspace.controller';
 import { RegisterController } from './rest-api/register/register.controller';
+import { ChannelController } from './rest-api/channel/channel.controller';
 import { WorkspaceService } from './services/workspace.service';
 import { UserController } from './rest-api/user/user.controller';
 import { UserService } from './services/user.service';
+import { ChannelService } from './services/channel.service';
 
 
 @Module({
@@ -29,8 +31,13 @@ import { UserService } from './services/user.service';
     ]),
     EntityRepositoryModule
   ],
-  controllers: [AppController, WorkspaceController, RegisterController, UserController],
-  providers: [AppService, AuthService, ChatGateway, FirebaseService, WebsocketService, WorkspaceService, UserService, WorkspaceRepository, UserRepository],
+  controllers: [AppController, WorkspaceController, RegisterController, UserController, ChannelController],
+  providers: [
+    {
+      provide: 'FirebaseService',
+      useClass: FirebaseService,
+    },
+    AppService, FirebaseService, AuthService, WebsocketGateway, ChannelService, WebsocketService, WorkspaceService, UserService, WorkspaceRepository, UserRepository, ChannelRepository],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -1,5 +1,6 @@
 import { call, take, all, put, takeEvery, select } from 'redux-saga/effects';
 import { navigateToSaga } from '../../shared/sagas/navigation/saga';
+import { deleteWorkspaceChannelError, deleteWorkspaceChannelSuccess, getWorkspaceChannels, getWorkspaceChannelsSuccess } from '../Home/components/Channel/actions';
 import {
   selectWorkspaceAction,
   selectWorkspace,
@@ -53,10 +54,13 @@ function* createWorkspaceSaga(action) {
 
 function* getWorkspaceSaga() {
   try {
-    const workspaceId = yield select((state) => state.selectedWorkspace);
+    const workspaceId = yield select((state) => state.workspace.activeWorkspace);
 
     yield put(getWorkspace({ id: workspaceId }));
     yield take(getWorkspaceSuccess);
+
+    yield put(getWorkspaceChannels({workspace: workspaceId}));
+    yield take(getWorkspaceChannelsSuccess);
   } catch (e) {
     yield put(getWorkspaceError(e));
   }

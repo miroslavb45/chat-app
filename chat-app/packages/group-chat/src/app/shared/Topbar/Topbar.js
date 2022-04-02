@@ -10,16 +10,13 @@ class Topbar extends Component {
   constructor() {
     super();
     this.auth = getAuth();
-
   }
 
   render() {
     return (
       <div className={styles.wrapper}>
-        <div className={styles.email}>
-          Welcome, <span>{this.auth.currentUser.email}</span>
-        </div>
-        <div className={styles.appTitle}>{this.props.workspace.name}</div>
+        <div className={styles.appTitle}>CHAT APP</div>
+        <div className={styles.workspaceName}>{this.props.workspace.name}</div>
         <div className={styles.logout}>
           <Link to="/logout">Logout</Link>
         </div>
@@ -28,7 +25,7 @@ class Topbar extends Component {
   }
 }
 const mapStateToPros = (state) => ({
-  workspace: state.selectedWorkspace
+  workspace: state.workspace.activeWorkspace,
 });
 
 export default connect(mapStateToPros)(Topbar);

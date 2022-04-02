@@ -78,7 +78,7 @@ class Create extends Component {
 }
 
 const mapStateToPros = (state) => ({
-  availableWorkspaces: state.availableWorkspaces,
+  availableWorkspaces: state.workspace.availableWorkspaces,
 });
 
 export default connect(mapStateToPros)(Create);
