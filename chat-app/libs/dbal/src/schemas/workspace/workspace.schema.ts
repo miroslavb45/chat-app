@@ -15,7 +15,7 @@ export class Workspace extends BaseSchema<Workspace>{
     required: false,
     default: []
   })
-  public channels?: Channel[];
+  public channels?: Reference<Channel>[];
 
   @prop({
     required: false,

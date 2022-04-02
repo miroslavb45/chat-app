@@ -4,6 +4,7 @@ import { WorkspaceRepository } from './repositories/workspace.repository';
 import { UserRepository } from './repositories/user.repository';
 
 import { DbalModule } from '@chat-app/dbal';
+import { ChannelRepository } from './repositories/channel.repository';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { DbalModule } from '@chat-app/dbal';
   ],
   providers: [
     WorkspaceRepository,
-    UserRepository
+    UserRepository,
+    ChannelRepository
   ],
   exports: [DbalModule]
 })

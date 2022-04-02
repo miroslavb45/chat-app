@@ -1,9 +1,9 @@
-import { User } from '@chat-app/dbal';
+import { User, WorkspaceUser } from '@chat-app/dbal';
 import { UserRepository, WorkspaceRepository } from '@chat-app/entity-repository';
 import { RequestDto } from '@chat-app/shared/auth';
 import { Controller, Get, HttpCode, Req } from '@nestjs/common';
+import { Types } from 'mongoose';
 import { WorkspaceService } from '../../services/workspace.service';
-import { UserInfoResponseDto } from './dtos/user-info-response.dto';
 
 
 @Controller()
@@ -12,7 +12,12 @@ export class UserController {
 
   @Get('me')
   @HttpCode(200)
-  public getUserInfo(@Req() request: RequestDto): User {
-    return request.dbUser;
+  public async getUserInfo(@Req() request: RequestDto): Promise<{ dbUser: User, workspaceUser: WorkspaceUser }> {
+    if (request.dbUser.activeWorkspace) {
+      const workspaceUser = await this.workspaceRepository.getWorkspaceUser(request.dbUser._id, new Types.ObjectId(request.dbUser.activeWorkspace as unknown as string));
+
+      return { dbUser: request.dbUser, workspaceUser: workspaceUser };
+    }
+    return { dbUser: request.dbUser, workspaceUser: null };
   }
 }

@@ -12,5 +12,11 @@ export class BaseMessage extends BaseSchema<BaseMessage>{
     required: true
   })
   public createdAt: Date;
+
+  @prop({
+    required: false,
+    default: null
+  })
+  public modifiedAt?: Date;
 }
 

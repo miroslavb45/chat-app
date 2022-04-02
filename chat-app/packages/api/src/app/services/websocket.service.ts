@@ -1,25 +1,14 @@
+import { Channel, User } from '@chat-app/dbal';
+import { ChannelRepository, WorkspaceRepository } from '@chat-app/entity-repository';
+import { Reference } from '@chat-app/utils';
 import { Injectable } from '@nestjs/common';
-import { Socket } from 'socket.io';
-
+import { Types } from 'mongoose';
 
 @Injectable()
 export class WebsocketService {
-    public connectedWebsocketClients: Set<Socket> = new Set();
 
-    public addSocket(socket: Socket) {
-        this.connectedWebsocketClients.add(socket);
-    }
+  public constructor(private readonly channelRepository: ChannelRepository, private readonly workspaceRepository: WorkspaceRepository) { }
 
-    public removeSocket(socket: Socket) {
-        this.connectedWebsocketClients.delete(socket);
-    }
-
-    public emitMessageToClients(message: any) {
-        console.log(message)
-        this.connectedWebsocketClients.forEach(client => {
-            client.emit('message', message);
-            console.log(`Message sent to: ${client.id}`)
-        })
-    }
 
 }
+

@@ -1,0 +1,83 @@
+@import '~stylesheets/abstracts';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  font-size: 14px;
+
+  img {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.messageBody {
+  display: flex;
+}
+
+.avatarContainer {
+  padding-right: 8px;
+  img {
+    border-radius: 50%;
+  }
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageHeader {
+  display: flex;
+  padding-bottom: 1px;
+  align-items: center;
+}
+
+.messageText {
+  line-height: 21px;
+  overflow-wrap: anywhere;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  /* identical to box height */
+
+  color: #5f5d5f;
+  p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  ul{
+      padding-left: 15px;
+      padding-top: 0px;
+      margin-top: 0px;
+  }
+}
+
+.playerName {
+  line-height: 16px;
+  padding-right: 8px;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+
+  color: #1d1c1d;
+}
+
+.sentDate {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+  /* identical to box height */
+
+  color: #626262;
+}

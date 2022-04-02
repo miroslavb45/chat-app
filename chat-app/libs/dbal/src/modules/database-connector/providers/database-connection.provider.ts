@@ -9,7 +9,6 @@ import { CONFIG } from '@chat-app/shared/config';
 export const databaseConnectionProvider: FactoryProvider = {
   provide: 'databaseConnection',
   useFactory: async () => {
-    console.log("ASd")
     try {
       const connection = await connect(
         CONFIG.mongo.url,

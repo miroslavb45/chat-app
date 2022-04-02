@@ -1,0 +1,29 @@
+.wrapper {
+  width: 230px;
+  background: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  padding: 10px;
+}
+
+.icon {
+  color: white;
+  font-size: 14px !important;
+  line-height: 10px;
+  margin-right: 5px;
+}
+
+.activity {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  text-transform: none;
+}
+
+.active {
+  background: #73CC45;
+  margin-right: 8px;
+}
+.inactive {
+  background: #7D7D7D;
+  margin-right: 8px;
+}

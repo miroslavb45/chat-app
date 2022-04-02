@@ -1,15 +1,41 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { getWorkspacesSuccess } from './actions';
+import { selectChannelAction, selectPrivateMessageAction, unselectMainContentAction } from './actions';
+import { toggleCreateChannelModalAction } from './components/Channel/components/CreateChannelModal/actions';
+import { toggleDeleteChannelModalAction } from './components/Channel/components/DeleteChannelModal/actions';
+import { toggleRenameChannelModalAction } from './components/Channel/components/RenameChannelModal/actions';
 
 const initialState = {
-  workspaces: [],
+  activeMainContent: null,
+  isModalOpen: false,
 };
 
 export default createReducer(initialState, {
-  [getWorkspacesSuccess]: (state, { payload }) => {
-    console.log(state, payload);
+  [selectChannelAction]: (state, { payload }) => {
+    state.activeMainContent = {
+      type: 'channel',
+      id: payload.id,
+    };
+  },
+  [selectPrivateMessageAction]: (state, { payload }) => {
+    state.activeMainContent = {
+      type: 'message',
+      id: payload.id,
+    };
+  },  
+  
+  [unselectMainContentAction]: (state, { payload }) => {
+    state.activeMainContent = null
+  },
+  [toggleCreateChannelModalAction]: (state, _) => {
+    state.isModalOpen = !state.isModalOpen;
+  },
 
-    state.workspaces = [...payload.workspaces];
+  [toggleRenameChannelModalAction]: (state, _) => {
+    state.isModalOpen = !state.isModalOpen;
+  },
+
+  [toggleDeleteChannelModalAction]: (state, _) => {
+    state.isModalOpen = !state.isModalOpen;
   },
 });

@@ -1,6 +1,6 @@
 import { UserRepository } from '@chat-app/entity-repository';
+import { isNullOrUndefined } from '@chat-app/utils';
 import { Controller, Post, Query, UnprocessableEntityException } from '@nestjs/common';
-import { isNullOrUndefined } from '@typegoose/typegoose/lib/internal/utils';
 @Controller('register')
 export class RegisterController {
   public constructor(private readonly userRepository: UserRepository) { }

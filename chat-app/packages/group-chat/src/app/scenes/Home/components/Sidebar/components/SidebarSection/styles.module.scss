@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  margin-bottom: 10px;
+  .titleWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .title {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
+      font-variant: small-caps;
+
+      color: #f4f4f4;
+    }
+    .addButton {
+      color: white;
+      font-size: 14px;
+      line-height: 10px;
+      &:hover {
+        transform: scale(1.05);
+        cursor: pointer;
+      }
+    }
+  }
+  .separator {
+    height: 1px;
+    width: 100%;
+    background-color: #363636;
+    margin-top: 8px;
+  }
+}

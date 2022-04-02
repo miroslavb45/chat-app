@@ -1,6 +1,7 @@
 import { UserRepository, WorkspaceRepository } from '@chat-app/entity-repository';
 import { RequestDto } from '@chat-app/shared/auth';
-import { ConflictException, Controller, Get, HttpCode, NotFoundException, Post, Query, Req, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import { ConflictException, Controller, Get, HttpCode, NotFoundException, Post, Query, Req, UnauthorizedException, UnprocessableEntityException, UseInterceptors } from '@nestjs/common';
+import { ErrorInterceptor } from '../../interceptors/error.interceptor';
 import { UserService } from '../../services/user.service';
 import { WorkspaceService } from '../../services/workspace.service';
 import { WorkspaceResponseDto } from './dtos/response/workspace-response.dto';
@@ -12,11 +13,12 @@ export class WorkspaceController {
   public constructor(private readonly workspaceRepository: WorkspaceRepository, private readonly userRepository: UserRepository, private readonly workspaceService: WorkspaceService, private readonly userService: UserService) { }
 
 
+  @UseInterceptors(ErrorInterceptor)
   @Get('workspaces')
   @HttpCode(200)
   public async getWorkspacesAction(@Req() request: RequestDto): Promise<WorkspacesResponseDto> {
 
-    const workspaces = await this.workspaceRepository.getMultiple(request.dbUser.workspaces);
+    const workspaces = await this.workspaceRepository.getChunkOfWorkspaces();
 
     return { workspaces: workspaces.map(workspace => ({ id: workspace._id, name: workspace.name })) };
   }
@@ -67,6 +69,7 @@ export class WorkspaceController {
 
     try {
       await this.userService.selectWorkspace(request.dbUser, dbWorkspace._id);
+      await this.workspaceService.addUserToWorkspaceById(dbWorkspace._id, request.dbUser);
       return { id: dbWorkspace._id.toString(), name: dbWorkspace.name }
     } catch (error) {
       console.error(error)

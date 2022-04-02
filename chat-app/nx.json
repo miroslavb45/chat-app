@@ -35,9 +35,6 @@
     "api": {
       "tags": ["platform:server", "type:app"]
     },
-    "shared-auth": {
-      "tags": ["type:lib", "lib:shared"]
-    },
     "dbal": {
       "tags": ["platform:server", "type:lib"]
     },
@@ -51,11 +48,14 @@
       "tags": [],
       "implicitDependencies": ["group-chat"]
     },
+    "shared-auth": {
+      "tags": ["type:lib", "lib:shared"]
+    },
     "shared-config": {
       "tags": ["type:lib", "lib:shared"]
     },
     "utils": {
-      "tags": []
+      "tags": ["type:lib"]
     }
   }
 }

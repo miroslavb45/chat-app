@@ -1,38 +1,39 @@
 .wrapper {
   height: 40px;
-  background: rgba(27, 23, 23, 0.6);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(27, 23, 23, 0.4);
   color: white;
 
   display: flex;
   flex-direction: row;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 10px;
+  z-index: 1;
+  padding-right: 10px;
 
   justify-content: space-between;
-  .email {
+  
+  .appTitle {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 
-    font-family: Roboto;
-    font-size: 12px;
+    font-family: 'Roboto';
     font-style: normal;
-    font-weight: 400;
-    line-height: 14px;
-    letter-spacing: 0em;
-    text-align: left;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 19px;
+    /* identical to box height */
 
-    span {
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 700;
-      line-height: 14px;
-      letter-spacing: 0em;
-      text-align: left;
-    }
+    font-variant: small-caps;
+
+    color: #ffffff;
   }
 
-  .appTitle {
+  .workspaceName {
     font-family: Roboto;
     font-style: normal;
     font-weight: bold;
@@ -53,18 +54,17 @@
     display: flex;
     align-items: center;
 
-    a{
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 12px;
-        line-height: 14px;
-        /* identical to box height */
+    a {
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 14px;
+      /* identical to box height */
 
-        text-decoration: none;
-    
-        color: #ffffff;
+      text-decoration: none;
+
+      color: #ffffff;
     }
-   
   }
 }

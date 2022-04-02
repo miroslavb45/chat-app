@@ -12,11 +12,16 @@ import { CONFIG } from "@chat-app/shared/config";
 
 
 import { AppModule } from './app/app.module';
+import { RedisIoAdapter } from './app/adapters/redis-io.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useWebSocketAdapter(new IoAdapter(app))
+  const redisIoAdapter = new RedisIoAdapter(app);
+  await redisIoAdapter.connectToRedis();
+  
+  app.useWebSocketAdapter(redisIoAdapter);
+  
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   app.enableCors({

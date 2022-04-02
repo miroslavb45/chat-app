@@ -19,3 +19,27 @@ export function isNullOrUndefined(value: unknown, arrayCheckWithAnd = false): bo
 
   return value === undefined || value === null;
 }
+
+
+/**
+ * Decodes a serialized string to an object.
+ * @param {string} serializedString
+ * @returns {any}
+ */
+export function deserializeString<T = unknown>(serializedString: string): T {
+  if (serializedString) {
+    return JSON.parse(serializedString);
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Serializes an object to a storable string representation.
+ * @param object
+ * @returns {string}
+ */
+export function serializeObject(object: unknown): string {
+  return JSON.stringify(object);
+}
+

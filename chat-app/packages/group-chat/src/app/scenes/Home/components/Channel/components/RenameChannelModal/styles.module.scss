@@ -1,0 +1,17 @@
+@import '~stylesheets/pages/_auth';
+
+.modalContentWrapper {
+  height: 300px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .closeIcon {
+      cursor: pointer;
+    }
+  }
+
+  .content {
+  }
+}
