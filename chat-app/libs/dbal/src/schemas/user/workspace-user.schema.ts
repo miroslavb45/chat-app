@@ -25,18 +25,18 @@ export class WorkspaceUser extends BaseSchema<WorkspaceUser> {
   public joinedChannels: Reference<Channel>[];
 
   @prop({
-    required: false
+    required: true
   })
-  public avatarUrl: string;
+  public displayName: string;
 
 
   @prop({
     required: false
   })
-  public role: string; // Just a string about the role in the company, not permissions.
+  public role: string;
 
   @prop({
     required: true
   })
-  public workspace: Reference<Workspace>; // Just a string about the role in the company, not permissions.
+  public workspace: Reference<Workspace>;
 }

@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import background from 'images/background.png';
 import icon from 'images/icon.png';
-
-// import { useAuth } from "../contexts/AuthContext"
-
-import styles from './styles.module.scss';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { registerUser } from './actions';
+import styles from './styles.module.scss';
 
 class Register extends Component {
   constructor() {

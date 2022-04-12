@@ -22,8 +22,8 @@ export class ChannelRepository {
   }
 
   /**
-   * Saves a Channel entity into the database.
-   * @param {Channel} Channel
+   * Saves a ChannelMessage entity into the database.
+   * @param {ChannelMessage} channelMessage
    * @return {Promise<void>}
    */
   public async createChannelMessage(channelMessage: ChannelMessage): Promise<ChannelMessage> {
@@ -31,8 +31,8 @@ export class ChannelRepository {
   }
 
   /**
-   * Deletes a Channel entity into the database.
-   * @param {ChannelMessage} channelMessage
+   * Deletes a Channel entity frome the database.
+   * @param {string} id
    * @return {Promise<void>}
    */
   public async deleteChannel(id: string): Promise<void> {
@@ -41,7 +41,7 @@ export class ChannelRepository {
 
   /**
    * Returns a Channel entity by id.
-   * @param {Reference<string>} channel
+   * @param {Reference<Channel>} channelId
    * @return {Promise<void>}
    */
   public async findById(channelId: Reference<Channel>): Promise<Channel> {
@@ -50,8 +50,8 @@ export class ChannelRepository {
 
 
   /**
-   * Deletes a Channel entity into the database.
-   * @param {ChannelMessage} channelMessage
+   * Deletes a ChannelMessage entity from the database.
+   * @param {string} messageId
    * @return {Promise<void>}
    */
   public async deleteChannelMessage(messageId: string): Promise<void> {
@@ -60,8 +60,8 @@ export class ChannelRepository {
 
   /**
    * Returns a list of Channels from a Workspace.
-   * @param {Reference<Channel>} channel
-   * @return {Promise<void>}
+   * @param {Reference<Workspace>} workspaceId
+   * @return {Promise<Channel[]>}
    */
   public async getWorkspaceChannels(workspaceId: Reference<Workspace>): Promise<Channel[]> {
     return ((await this.workspaceModel.aggregate([
@@ -88,17 +88,17 @@ export class ChannelRepository {
 
   /**
    * Returns a ChannelMessage entity by id.
-   * @param {Reference<Channel>} channel
-   * @return {Promise<void>}
+   * @param {Reference<ChannelMessage>} channelMessageId
+   * @return {Promise<ChannelMessage>}
    */
-  public async findChannelMessageById(id: Reference<ChannelMessage>): Promise<ChannelMessage> {
-    return await this.channelMessageModel.findById(id);
+  public async findChannelMessageById(channelMessageId: Reference<ChannelMessage>): Promise<ChannelMessage> {
+    return await this.channelMessageModel.findById(channelMessageId);
   }
 
   /**
-   * Returns a ChannelMessage entity by id.
+   * Returns a list of ChannelMessage by channel id.
    * @param {Reference<Channel>} channel
-   * @return {Promise<void>}
+   * @return {Promise<ChannelMessage[]>}
    */
   public async getChannelMessages(channel: Reference<Channel>): Promise<ChannelMessage[]> {
     return await this.channelMessageModel.find({ channel: channel });
@@ -109,9 +109,9 @@ export class ChannelRepository {
    * Updates a Channel entity by id and payload.
    * @param {Reference<Channel>} channel
    * @param {Partial<Channel>} payload
-   * @return {Promise<Channel>}
+   * @return {Promise<void>}
    */
-  public async updateById(channel: Reference<Channel>, payload: Partial<Channel>): Promise<void> {
+  public async updateById(channel: Reference<Channel>, payload: Partial<Channel>): Promise<Channel> {
     return this.channelModel.findOneAndUpdate({
       _id: channel._id.toString()
     }, payload, { upsert: true })
@@ -119,11 +119,11 @@ export class ChannelRepository {
 
   /**
    * Updates a ChannelMessage entity by id and payload.
-   * @param {Reference<Channel>} channel
-   * @param {Partial<Channel>} payload
-   * @return {Promise<Channel>}
+   * @param {Reference<ChannelMessage>} channel
+   * @param {Partial<ChannelMessage>} payload
+   * @return {Promise<void>}
    */
-  public async updateChannelMessageById(channelMessage: Reference<ChannelMessage>, payload: Partial<ChannelMessage>): Promise<void> {
+  public async updateChannelMessageById(channelMessage: Reference<ChannelMessage>, payload: Partial<ChannelMessage>): Promise<ChannelMessage> {
     return this.channelMessageModel.findOneAndUpdate({
       _id: channelMessage._id.toString()
     }, payload, { upsert: true })

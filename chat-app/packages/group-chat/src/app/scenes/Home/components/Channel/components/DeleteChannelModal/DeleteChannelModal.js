@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'simple-react-modal';
 import { unselectMainContentAction } from '../../../../actions';
-import { deleteWorkspaceChannel, renameWorkspaceChannel } from '../../actions';
-import { toggleDeleteChannelModalAction, toggleRenameChannelModalAction } from './actions';
+import { deleteWorkspaceChannel } from '../../actions';
+import { toggleDeleteChannelModalAction } from './actions';
 import styles from './styles.module.scss';
 
 class DeleteChannelModal extends Component {
@@ -23,7 +23,7 @@ class DeleteChannelModal extends Component {
     if (this.state.name === this.props.channelName) {
       this.props.dispatch(
         deleteWorkspaceChannel({
-          id: this.props.channelId,
+          entityId: this.props.channelId,
         })
       );
       this.setState({ inputError: null });
@@ -63,10 +63,6 @@ class DeleteChannelModal extends Component {
                 <input onClick={this.handleChannelRename} type="submit" value="Delete" />
 
                 <div className={styles.bottomLabel}>
-                  {/* Already have one? Select a{' '}
-                  <Link className={styles.registerLink} to="/workspaces">
-                    Workspace */}
-                  {/* </Link> */}
                 </div>
               </form>
             </div>

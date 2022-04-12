@@ -1,10 +1,10 @@
+import CloseIcon from '@mui/icons-material/Close';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'simple-react-modal';
+import { createWorkspaceChannel } from '../../actions';
 import { toggleCreateChannelModalAction } from './actions';
 import styles from './styles.module.scss';
-import CloseIcon from '@mui/icons-material/Close';
-import { createWorkspaceChannel, createWorkspaceChannels } from '../../actions';
 
 class CreateChannelModal extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class CreateChannelModal extends Component {
     e.stopPropagation();
 
     this.props.dispatch(createWorkspaceChannel({
-        workspace: this.props.workspace,
+        entityId: this.props.workspace,
         name: this.state.name
     }))
   };
@@ -55,10 +55,6 @@ class CreateChannelModal extends Component {
                 <input onClick={this.handleChannelCreation} type="submit" value="Create" />
 
                 <div className={styles.bottomLabel}>
-                  {/* Already have one? Select a{' '}
-                  <Link className={styles.registerLink} to="/workspaces">
-                    Workspace */}
-                  {/* </Link> */}
                 </div>
               </form>
             </div>

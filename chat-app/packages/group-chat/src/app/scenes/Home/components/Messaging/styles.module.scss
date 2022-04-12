@@ -1,0 +1,100 @@
+.channelWrapper {
+    background-color: white;
+    height: 100%;
+    overflow: scroll;
+  
+    padding: 0px 16px;
+  }
+  
+  .messageInputWrapper {
+    position: absolute;
+    bottom: 10px;
+    left: 16px;
+    right: 16px;
+  }
+  
+  .topWrapper {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: space-between;
+    top: 16px;
+    right: 16px;
+    left: 16px;
+    background: white;
+  }
+  .messagesWrapper {
+    overflow: scroll;
+    position: absolute;
+    top: 60px;
+    bottom: 100px;
+    padding-bottom: 80px;
+    right: 16px;
+    left: 16px;
+  }
+  
+  .headerWrapper {
+    display: flex;
+    justify-content: space-between;
+  
+    .info {
+      align-items: center;
+      display: flex;
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 900;
+      font-size: 18px;
+      line-height: 21px;
+      /* identical to box height */
+  
+      color: #1d1c1d;
+  
+      .joinedUsersWrapper{
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+      }
+    }
+  
+    .actions {
+      display: flex;
+  
+      .rename {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+  
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        // line-height: 16px;
+        font-variant: small-caps;
+  
+        cursor: pointer;
+      }
+  
+      .delete {
+        margin-left: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+  
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        // line-height: 16px;
+        font-variant: small-caps;
+  
+        cursor: pointer;
+      }
+    }
+  }
+  
+  .separator {
+    border: 1px solid #dddddd;
+    width: 100%;
+    margin-top: 10px;
+  }
+  

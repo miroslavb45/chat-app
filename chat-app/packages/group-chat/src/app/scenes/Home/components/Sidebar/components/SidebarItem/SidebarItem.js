@@ -1,8 +1,8 @@
+import classNames from 'classnames';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styles from './styles.module.scss';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { selectChannelAction, selectPrivateMessageAction } from '../../../../actions';
+import styles from './styles.module.scss';
 
 class SidebarItem extends Component {
   get selectAction() {
@@ -21,7 +21,10 @@ class SidebarItem extends Component {
 
   render() {
     return (
-      <div className={styles.wrapper} onClick={this.handleItemClick}>
+      <div
+        className={classNames({ [styles.notification]: this.props.showNotification }, styles.wrapper)}
+        onClick={this.handleItemClick}
+      >
         {this.props.icon}
         {this.props.name}
       </div>

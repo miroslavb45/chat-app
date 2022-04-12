@@ -1,5 +1,3 @@
-import { getAuth } from 'firebase/auth';
-import { io } from 'socket.io-client';
 import { store } from './app';
 import { getActiveWsConnection } from './shared/services/websocket';
 
@@ -19,10 +17,10 @@ export default function () {
           };
 
           ws.emit(action.payload.name, action.payload.payload);
-          console.log(action.payload.name + ' message sent.');
+          //console.log(action.payload.name + ' message sent.');
 
           if (action.payload.needsResponse) {
-            console.log("Needs response branch")
+            //console.log('Needs response branch');
             ws.once(action.payload.success, listener);
 
             // We wait for the response action for 2s
@@ -40,7 +38,6 @@ export default function () {
               store.dispatch(action.payload.error(error));
             }
           }
-
         }
       }
 

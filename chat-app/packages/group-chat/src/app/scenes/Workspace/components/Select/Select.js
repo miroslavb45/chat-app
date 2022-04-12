@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
-import styles from './styles.module.scss';
-
 import background from 'images/background.png';
 import icon from 'images/icon.png';
-
-import { Link } from 'react-router-dom';
-
-import { default as InputSelect } from 'react-select';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { default as InputSelect } from 'react-select';
 import { getWorkspaces, selectWorkspaceAction } from '../../actions';
+import styles from './styles.module.scss';
 
 class Select extends Component {
   constructor() {
@@ -27,8 +24,6 @@ class Select extends Component {
   componentDidUpdate() {
     if (this.props.activeWorkspace) {
       this.props.dispatch(selectWorkspaceAction({ isActive: true }));
-      console.log("WORKSPACE SELECTED")
-
     }
   }
 
@@ -41,7 +36,6 @@ class Select extends Component {
   }
 
   render() {
-    console.log(this.options);
     return (
       <div className={styles.mainWrapper} style={{ backgroundImage: `url(${background})` }}>
         <div className={styles.overlay}></div>
