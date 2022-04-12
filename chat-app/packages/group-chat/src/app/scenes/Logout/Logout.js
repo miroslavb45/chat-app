@@ -1,13 +1,13 @@
+import { getAuth, signOut } from '@firebase/auth';
 import React, { Component } from 'react';
-import { getAuth, signOut } from '@firebase/auth'
 import { connect } from 'react-redux';
+import { unselectMainContentAction } from '../Home/actions';
 import { unselectWorkspaceAction } from '../Workspace/actions';
-import { getUserInfoAction } from '../Login/actions';
-
 
 class Logout extends Component {
   componentDidMount() {
-    this.props.dispatch(unselectWorkspaceAction())
+    this.props.dispatch(unselectWorkspaceAction());
+    this.props.dispatch(unselectMainContentAction());
 
     const auth = getAuth();
     signOut(auth)
@@ -24,6 +24,5 @@ class Logout extends Component {
     return <div>Logout</div>;
   }
 }
-
 
 export default connect()(Logout);

@@ -1,9 +1,9 @@
+import { Reference } from '@chat-app/utils';
 import { prop } from '@typegoose/typegoose';
 import { BaseSchema } from '../base.schema';
-import { Reference } from '@chat-app/utils';
-import { Workspace } from '../workspace/workspace.schema';
-import { User } from '../user/user.schema';
 import { ChannelMessage } from '../message/channel-message.schema';
+import { WorkspaceUser } from '../user/workspace-user.schema';
+import { Workspace } from '../workspace/workspace.schema';
 
 export class Channel extends BaseSchema<Channel>{
 
@@ -11,6 +11,11 @@ export class Channel extends BaseSchema<Channel>{
     required: true
   })
   public name: string;
+
+  @prop({
+    required: true
+  })
+  public author: Reference<WorkspaceUser>;
 
   @prop({
     required: true,
@@ -27,13 +32,13 @@ export class Channel extends BaseSchema<Channel>{
     required: true,
     default: []
   })
-  public joinedUsers?: Reference<User>[];
+  public joinedUsers?: Reference<WorkspaceUser>[];
 
   @prop({
     required: true,
     default: []
   })
-  public admins?: Reference<User>[];
+  public admins?: Reference<WorkspaceUser>[];
 }
 
 

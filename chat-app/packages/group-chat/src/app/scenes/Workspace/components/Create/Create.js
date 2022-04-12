@@ -1,14 +1,10 @@
-import React, { Component } from 'react';
-import styles from './styles.module.scss';
-
 import background from 'images/background.png';
 import icon from 'images/icon.png';
-
-import { Link } from 'react-router-dom';
-
-import { default as InputSelect } from 'react-select';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createWorkspaceAction, getWorkspaces, selectWorkspaceAction } from '../../actions';
+import { Link } from 'react-router-dom';
+import { createWorkspaceAction } from '../../actions';
+import styles from './styles.module.scss';
 
 class Create extends Component {
   constructor() {
@@ -28,7 +24,6 @@ class Create extends Component {
   handleWorkspaceNameChange = (e) => {
     this.setState({ name: e.target.value });
   };
-
 
   get options() {
     return this.props.availableWorkspaces.map((i) => ({ value: i.id, label: i.name })) || {};

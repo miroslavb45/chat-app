@@ -1,6 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { getUserInfoSuccess } from '../Login/actions';
-
 import { getWorkspacesSuccess, getWorkspaceSuccess, selectWorkspaceSuccess, unselectWorkspaceSuccess } from './actions';
 
 const initialState = {

@@ -2,7 +2,7 @@ import { Reference } from '@chat-app/utils';
 import { prop } from '@typegoose/typegoose';
 import { BaseSchema } from '../base.schema';
 import { Channel } from '../channel/channel.schema';
-import { User } from '../user/user.schema';
+import { WorkspaceUser } from '../user/workspace-user.schema';
 
 export class Workspace extends BaseSchema<Workspace>{
 
@@ -21,7 +21,7 @@ export class Workspace extends BaseSchema<Workspace>{
     required: false,
     default: []
   })
-  public joinedUsers: Reference<User>[];
+  public joinedUsers: Reference<WorkspaceUser>[];
 
 }
 

@@ -4,34 +4,45 @@ import { EditorState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { convertToHTML, convertFromHTML } from 'draft-convert';
 import { getDefaultKeyBinding, ContentState, SelectionState, Modifier } from 'draft-js';
-import { clearEditorContent } from 'draftjs-utils';
-import styles from './styles.module.scss'
+import { clearEditorContent, insertNewUnstyledBlock } from 'draftjs-utils';
+import styles from './styles.module.scss';
+import { connect } from 'react-redux';
+import { Message } from '@mui/icons-material';
 
-export default class MessageInput extends Component {
+class MessageInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
+      editing: false,
     };
   }
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.editingMessage && !prevState.editing) {
+      this.setState({ editorState: EditorState.createWithContent(convertFromHTML(this.props.editingMessage.content)) });
+      this.setState({ editing: true });
+    }
+  };
   onEditorStateChange = (editorState) => {
-    // if (!this.state.clearing) {
     this.setState({
       editorState,
     });
-    // }
   };
 
   handleKeyCommand = (command) => {
     if (command === 'myeditor-save') {
-      this.props.onSubmit(convertToHTML(this.state.editorState.getCurrentContent()));
-      //   this.setState({
-      //     editorState: EditorState.push(this.state.editorState, ContentState.createFromText('')),
-      //   });
+      if (this.state.editing) {
+        this.props.onEdit({
+          content: convertToHTML(this.state.editorState.getCurrentContent()),
+          messageId: this.props.editingMessage._id,
+        });
+        this.setState({ editing: false });
+      } else {
+        this.props.onSubmit(convertToHTML(this.state.editorState.getCurrentContent()));
+      }
 
       this.setState({ editorState: clearEditorContent(this.state.editorState) });
-     
 
       return 'handled';
     }
@@ -62,3 +73,9 @@ export default class MessageInput extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  editingMessage: state.channel.activeChannel?.editingMessage || state.messaging.activeMessaging?.editingMessage,
+});
+
+export default connect(mapStateToProps)(MessageInput);

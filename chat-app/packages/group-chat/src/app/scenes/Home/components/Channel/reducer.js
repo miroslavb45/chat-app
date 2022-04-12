@@ -1,13 +1,17 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { getJoinedChannelsSuccess } from '../../actions';
+import { isNullOrUndefined } from '@typegoose/typegoose/lib/internal/utils';
+import { getJoinedChannelsSuccess, selectChannelAction } from '../../actions';
 import {
   createWorkspaceChannelError,
   createWorkspaceChannelSuccess,
+  deleteChannelMessageSuccess,
   deleteWorkspaceChannelError,
   deleteWorkspaceChannelSuccess,
+  editChanelMessageAction,
   getWorkspaceChannelsSuccess,
   getWorkspaceChannelSuccess,
   joinChannelSuccess,
+  modifyChannelMessageSuccess,
   newChannelMessageAction,
   renameWorkspaceChannelError,
   renameWorkspaceChannelSuccess,
@@ -97,6 +101,44 @@ export default createReducer(initialState, {
       } else {
         state.channelMessages[payload.channel] = [{ ...payload }];
       }
+      if (payload.channel !== state.activeChannel?.id) {
+        // New notification
+        const index = state.availableChannels.findIndex((item) => item.id === payload.channel);
+        state.availableChannels[index] = { ...state.availableChannels[index], notification: true };
+      }
+    }
+  },
+
+  [deleteChannelMessageSuccess]: (state, { payload }) => {
+    if (payload.channelId) {
+      if (state.channelMessages[payload.channelId]) {
+        state.channelMessages[payload.channelId] = state.channelMessages[payload.channelId].filter(
+          (i) => i._id !== payload.messageId
+        );
+      }
+    }
+  },
+
+  [editChanelMessageAction]: (state, { payload }) => {
+    state.activeChannel.editingMessage = payload;
+  },
+
+  [modifyChannelMessageSuccess]: (state, { payload }) => {
+    if (state.activeChannel.editingMessage && state.activeChannel.editingMessage._id === payload._id) {
+      state.activeChannel.editingMessage = null;
+    }
+
+    if (state.channelMessages[payload.channel]) {
+      const index = state.channelMessages[payload.channel].findIndex((item) => item._id === payload._id);
+      state.channelMessages[payload.channel][index] = { ...payload };
+    }
+  },
+
+  [selectChannelAction]: (state, { payload }) => {
+    const index = state.availableChannels?.findIndex((i) => i.id === payload.id);
+    if (!isNullOrUndefined(index)) {
+      console.log('Notification remove for channel: ', state.availableChannels[index].name);
+      state.availableChannels[index] = { ...state.availableChannels[index], notification: false };
     }
   },
 });

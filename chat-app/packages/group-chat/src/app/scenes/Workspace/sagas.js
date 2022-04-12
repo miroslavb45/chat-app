@@ -1,21 +1,21 @@
-import { call, take, all, put, takeEvery, select } from 'redux-saga/effects';
+import { all, call, put, select, take, takeEvery } from 'redux-saga/effects';
 import { navigateToSaga } from '../../shared/sagas/navigation/saga';
-import { deleteWorkspaceChannelError, deleteWorkspaceChannelSuccess, getWorkspaceChannels, getWorkspaceChannelsSuccess } from '../Home/components/Channel/actions';
+import { getWorkspaceChannels, getWorkspaceChannelsSuccess } from '../Home/components/Channel/actions';
 import {
-  selectWorkspaceAction,
-  selectWorkspace,
-  selectWorkspaceError,
-  unselectWorkspaceAction,
-  unselectWorkspaceError,
-  selectWorkspaceSuccess,
-  unselectWorkspace,
   createWorkspace,
   createWorkspaceAction,
   createWorkspaceSuccess,
   getWorkspace,
-  getWorkspaceSuccess,
-  getWorkspaceError,
   getWorkspaceAction,
+  getWorkspaceError,
+  getWorkspaceSuccess,
+  selectWorkspace,
+  selectWorkspaceAction,
+  selectWorkspaceError,
+  selectWorkspaceSuccess,
+  unselectWorkspace,
+  unselectWorkspaceAction,
+  unselectWorkspaceError,
 } from './actions';
 
 function* selectWorkspaceSaga(action) {
@@ -23,7 +23,7 @@ function* selectWorkspaceSaga(action) {
     const workspace = action.payload;
 
     if (!workspace.isActive) {
-      yield put(selectWorkspace({ id: workspace.value }));
+      yield put(selectWorkspace({ entityId: workspace.value }));
       yield take(selectWorkspaceSuccess);
     }
 
@@ -34,7 +34,7 @@ function* selectWorkspaceSaga(action) {
   }
 }
 
-function* unselectWorkspaceSaga(action) {
+function* unselectWorkspaceSaga() {
   try {
     yield put(unselectWorkspace());
   } catch (e) {
@@ -56,10 +56,10 @@ function* getWorkspaceSaga() {
   try {
     const workspaceId = yield select((state) => state.workspace.activeWorkspace);
 
-    yield put(getWorkspace({ id: workspaceId }));
+    yield put(getWorkspace({ entityId: workspaceId }));
     yield take(getWorkspaceSuccess);
 
-    yield put(getWorkspaceChannels({workspace: workspaceId}));
+    yield put(getWorkspaceChannels({ entityId: workspaceId }));
     yield take(getWorkspaceChannelsSuccess);
   } catch (e) {
     yield put(getWorkspaceError(e));

@@ -5,6 +5,7 @@ import createWsAction from '../../../../../utils/wsActionCreator';
 export const getWorkspaceChannelsAction = createAction('GET_WORKSPACE_CHANNELS_INTERNAL');
 export const getWorkspaceChannelAction = createAction('GET_WORKSPACE_CHANNEL_INTERNAL');
 export const newChannelMessageAction = createAction('NEW_CHANNEL_MESSAGE_INTERNAL');
+export const editChanelMessageAction = createAction('EDIT_CHANNEL_MESSAGE_INTERNAL');
 
 export const {
   success: getWorkspaceChannelsSuccess,
@@ -53,4 +54,16 @@ export const {
   error: sendChannelMessageError,
   action: sendChannelMessage,
 } = createWsAction('SEND_CHANNEL_MESSAGE_MESSAGE', 'CHANNEL_MESSAGE_MESSAGE');
+
+export const {
+  success: deleteChannelMessageSuccess,
+  error: deleteChannelMessageError,
+  action: deleteChannelMessage,
+} = createWsAction('DELETE_CHANNEL_MESSAGE_MESSAGE', 'DELETED_CHANNEL_MESSAGE_MESSAGE');
+
+export const {
+  success: modifyChannelMessageSuccess,
+  error: modifyChannelMessageError,
+  action: modifyChannelMessage,
+} = createWsAction('MODIFY_CHANNEL_MESSAGE_MESSAGE', 'MODIFIED_CHANNEL_MESSAGE_MESSAGE');
 

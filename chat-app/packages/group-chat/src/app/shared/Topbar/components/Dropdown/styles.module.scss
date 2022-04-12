@@ -1,0 +1,22 @@
+.wrapper {
+  width: 200px;
+  z-index: 100;
+  background: white;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+  /* identical to box height */
+
+  cursor: pointer;
+
+  color: #ffffff;
+}

@@ -1,15 +1,10 @@
+import CloseIcon from '@mui/icons-material/Close';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from 'simple-react-modal';
-import { toggleCreateChannelModalAction, toggleRenameChannelModalAction } from './actions';
+import { renameWorkspaceChannel } from '../../actions';
+import { toggleRenameChannelModalAction } from './actions';
 import styles from './styles.module.scss';
-import CloseIcon from '@mui/icons-material/Close';
-import {
-  createWorkspaceChannel,
-  createWorkspaceChannels,
-  renameWorkspaceChannel,
-  renameWorkspaceChannelSuccess,
-} from '../../actions';
 
 class RenameChannelModal extends Component {
   constructor(props) {
@@ -25,7 +20,7 @@ class RenameChannelModal extends Component {
     e.stopPropagation();
     this.props.dispatch(
       renameWorkspaceChannel({
-        id: this.props.channelId,
+        entityId: this.props.channelId,
         name: this.state.name,
       })
     );
@@ -61,10 +56,6 @@ class RenameChannelModal extends Component {
                 <input onClick={this.handleChannelRename} type="submit" value="Rename" />
 
                 <div className={styles.bottomLabel}>
-                  {/* Already have one? Select a{' '}
-                  <Link className={styles.registerLink} to="/workspaces">
-                    Workspace */}
-                  {/* </Link> */}
                 </div>
               </form>
             </div>

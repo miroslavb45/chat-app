@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import background from 'images/background.png';
 import icon from 'images/icon.png';
-import { Link } from 'react-router-dom';
-
-// import { useAuth } from "../contexts/AuthContext"
-
-import styles from './styles.module.scss';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import styles from './styles.module.scss';
+
 class Login extends Component {
   constructor() {
     super();
@@ -70,7 +68,7 @@ class Login extends Component {
                 <input onClick={this.handleSubmit} type="submit" value="Login" />
 
                 <div className={styles.bottomLabel}>
-                  Don’t have an Account?{' '}
+                  Don't have an Account?{' '}
                   <Link className={styles.registerLink} to="/register">
                     Register
                   </Link>

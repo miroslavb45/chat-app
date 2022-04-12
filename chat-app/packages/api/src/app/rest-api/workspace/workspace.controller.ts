@@ -1,9 +1,8 @@
 import { UserRepository, WorkspaceRepository } from '@chat-app/entity-repository';
-import { RequestDto } from '@chat-app/shared/auth';
+import { RequestDto, WorkspaceService } from '@chat-app/shared/auth';
 import { ConflictException, Controller, Get, HttpCode, NotFoundException, Post, Query, Req, UnauthorizedException, UnprocessableEntityException, UseInterceptors } from '@nestjs/common';
 import { ErrorInterceptor } from '../../interceptors/error.interceptor';
 import { UserService } from '../../services/user.service';
-import { WorkspaceService } from '../../services/workspace.service';
 import { WorkspaceResponseDto } from './dtos/response/workspace-response.dto';
 import { WorkspacesResponseDto } from './dtos/response/workspaces-response.dto';
 
@@ -16,7 +15,7 @@ export class WorkspaceController {
   @UseInterceptors(ErrorInterceptor)
   @Get('workspaces')
   @HttpCode(200)
-  public async getWorkspacesAction(@Req() request: RequestDto): Promise<WorkspacesResponseDto> {
+  public async getWorkspacesAction(): Promise<WorkspacesResponseDto> {
 
     const workspaces = await this.workspaceRepository.getChunkOfWorkspaces();
 
@@ -32,18 +31,15 @@ export class WorkspaceController {
     }
     const dbWorkspace = await this.workspaceRepository.findByName(name);
 
-
     if (dbWorkspace) {
       throw new ConflictException(`Workspace named ${name} already exists.`);
     }
 
     const workspace = await this.workspaceRepository.create(name);
 
-
     if (!workspace) {
       throw new Error('Workspace creation failed.')
     }
-
 
     try {
       await this.workspaceService.addUserToWorkspaceById(workspace._id, request.dbUser);
@@ -56,20 +52,23 @@ export class WorkspaceController {
 
   @Post('workspace/select')
   @HttpCode(200)
-  public async selectWorkspaceAction(@Req() request: RequestDto, @Query('id') id: string): Promise<Partial<WorkspaceResponseDto>> {
+  public async selectWorkspaceAction(@Req() request: RequestDto, @Query('entityId') entityId: string): Promise<Partial<WorkspaceResponseDto>> {
 
-    if (!id) {
+    if (!entityId) {
       throw new UnprocessableEntityException('No workspace id provided in the payload.');
     }
-    const dbWorkspace = await this.workspaceRepository.findById(id);
+
+    const dbWorkspace = await this.workspaceRepository.findById(entityId);
 
     if (!dbWorkspace) {
       throw new NotFoundException(`Workspace named ${dbWorkspace.name} doesn't exists.`);
     }
 
     try {
-      await this.userService.selectWorkspace(request.dbUser, dbWorkspace._id);
-      await this.workspaceService.addUserToWorkspaceById(dbWorkspace._id, request.dbUser);
+      const workspaceUser = await this.workspaceService.addUserToWorkspaceById(dbWorkspace._id, request.dbUser);
+
+      await this.userService.selectWorkspace(request.dbUser, workspaceUser, dbWorkspace._id);
+
       return { id: dbWorkspace._id.toString(), name: dbWorkspace.name }
     } catch (error) {
       console.error(error)
@@ -89,18 +88,20 @@ export class WorkspaceController {
 
   @Get('workspace')
   @HttpCode(200)
-  public async getWorkspaceAction(@Req() request: RequestDto, @Query('id') id: string): Promise<WorkspaceResponseDto> {
+  public async getWorkspaceAction(@Req() request: RequestDto, @Query('entityId') entityId: string): Promise<WorkspaceResponseDto> {
 
-    if (!id) {
+    if (!entityId) {
       throw new UnprocessableEntityException('No workspace id provided in the payload.');
     }
-    const dbWorkspace = await this.workspaceRepository.findById(id);
+    const dbWorkspace = await this.workspaceRepository.findById(entityId);
 
     if (!dbWorkspace) {
       throw new ConflictException(`Workspace doesn't exist.`);
     }
 
-    if (!dbWorkspace.joinedUsers.includes(request.dbUser._id)) {
+    const workspaceUser = await this.workspaceRepository.getWorkspaceUser(request.dbUser._id, request.dbUser.activeWorkspace._id);
+
+    if (!dbWorkspace.joinedUsers.includes(workspaceUser._id)) {
       throw new UnauthorizedException('User is not participating in the group.');
     }
 

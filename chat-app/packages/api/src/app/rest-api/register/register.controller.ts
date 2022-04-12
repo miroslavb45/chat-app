@@ -6,9 +6,13 @@ export class RegisterController {
   public constructor(private readonly userRepository: UserRepository) { }
 
   @Post()
-  public async registerAction(@Query('email') email: string): Promise<void> {
+  public async registerAction(@Query('email') email: string, @Query('displayName') displayName: string): Promise<void> {
     if (!email) {
       throw new UnprocessableEntityException('No email provided in the payload.');
+    }
+
+    if (!displayName) {
+      throw new UnprocessableEntityException('No name provided in the payload.');
     }
 
     const dbUser = await this.userRepository.findByEmail(email);
@@ -18,7 +22,7 @@ export class RegisterController {
     }
 
     await this.userRepository.create({
-      email: email
+      email: email,
     });
 
     console.log(`[${email}] New user created successfully.`);

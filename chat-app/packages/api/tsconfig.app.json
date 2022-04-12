@@ -2,17 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.mock.ts",
-    "**/*.spec.todo.ts",
-    "**/tests/**/*.ts"
-  ],
-  "include": [
-    "**/*.ts"
-  ]
+  "exclude": ["**/*.spec.ts", "**/*.mock.ts", "**/*.spec.todo.ts", "**/tests/**/*.ts"],
+  "include": ["**/*.ts", "../../libs/shared/auth/src/lib/services/websocket.service.ts"]
 }

@@ -1,12 +1,13 @@
 import { all, put, select, take, takeEvery } from 'redux-saga/effects';
-import { selectChannelAction } from '../../actions';
+import { getJoinedChannelsSuccess, selectChannelAction } from '../../actions';
 import {
-    createWorkspaceChannelSuccess,
-    getWorkspaceChannel, getWorkspaceChannelError,
-    joinChannel,
-    joinChannelSuccess,
-    subscribeToChannel,
-    subscribeToChannelSuccess
+  createWorkspaceChannelSuccess,
+  getWorkspaceChannel,
+  getWorkspaceChannelError,
+  joinChannel,
+  joinChannelSuccess,
+  subscribeToChannel,
+  subscribeToChannelSuccess,
 } from './actions';
 import { toggleCreateChannelModalAction } from './components/CreateChannelModal/actions';
 
@@ -15,16 +16,14 @@ function* createWorkspaceChannelSaga(action) {
     yield put(toggleCreateChannelModalAction());
 
     return;
-  } catch (e) {
-    // yield put(selectWorkspaceError(e));
-  }
+  } catch (e) {}
 }
 
 function* selectChannelSaga(action) {
   try {
     const channelId = action.payload.id;
 
-    yield put(getWorkspaceChannel({ id: channelId }));
+    yield put(getWorkspaceChannel({ entityId: channelId }));
 
     const isJoined = (yield select((state) => state.channel.joinedChannels))?.includes(channelId);
 
@@ -50,9 +49,24 @@ function* selectChannelSaga(action) {
   }
 }
 
+function* subscribeToJoinedChannelsSaga(action) {
+  try {
+    const joinedChannels = yield select((state) => state.channel.joinedChannels);
+
+    for (const channel of joinedChannels) {
+      yield put(subscribeToChannel({ channel: channel }));
+    }
+
+    return;
+  } catch (e) {
+    yield put(getWorkspaceChannelError(e));
+  }
+}
+
 export default function* channelSaga() {
   yield all([
     takeEvery(createWorkspaceChannelSuccess, createWorkspaceChannelSaga),
     takeEvery(selectChannelAction, selectChannelSaga),
+    takeEvery(getJoinedChannelsSuccess, subscribeToJoinedChannelsSaga),
   ]);
 }

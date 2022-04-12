@@ -1,5 +1,4 @@
-import { User } from "@chat-app/dbal";
-import { Channel } from "libs/dbal/src/schemas/channel/channel.schema";
+import { User, Channel } from "@chat-app/dbal";
 
 export class WorkspaceResponseDto {
 

@@ -1,3 +1,3 @@
 export class DeleteChannelMessageRequestDto {
-    public messageId: string;
+    public entityId: string;
 }
