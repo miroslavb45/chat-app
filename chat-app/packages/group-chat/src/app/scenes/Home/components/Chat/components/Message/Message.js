@@ -1,10 +1,9 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-
-import avatar from 'images/defaultProfilePic.webp';
-
-import styles from './styles.module.scss';
+import React from 'react';
 import { parseEmojis } from 'utils/parseEmojis';
+import styles from './styles.module.scss';
+
+
 
 export const Message = (props) => {
   const { message, onSendMessage } = props;

@@ -4,16 +4,16 @@ import { store } from '../../app';
 import {
   deleteChannelMessageSuccess,
   modifyChannelMessageSuccess,
-  newChannelMessageAction,
+  newChannelMessageAction
 } from '../../scenes/Home/components/Channel/actions';
 import {
   deletePrivateMessageSuccess,
   modifyPrivateMessageSuccess,
   newPrivateMessageAction,
   userJoinedAction,
-  userLeftAction,
+  userLeftAction
 } from '../../scenes/Home/components/Messaging/actions';
-import { callEndedAction, callEndedSuccess, callStartedAction, callStartedMessage, callStartedSuccess, incomingCallAction } from '../../scenes/VideoChat/actions';
+import { callEndedAction, callStartedAction, incomingCallAction } from '../../scenes/VideoChat/actions';
 
 let websocketConnection = null;
 
