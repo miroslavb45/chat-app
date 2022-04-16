@@ -35,6 +35,7 @@ services:
       - "80:80"
     networks:
       - network-1
+
   group-chat:
     build:
       context: "../../"
@@ -66,14 +67,20 @@ services:
     logging:
       driver: none
 
-  # peerjs:
-  #   image: peerjs/peerjs-server
+  peerjs:
+    image: peerjs/peerjs-server
+    ports:
+      - "4444:4444"
+    command: [ "--port", "4444", "--path", "/myapp", "--proxied", "false" ]
+    networks:
+      - network-1
+
+  # turn:
+  #   image: instrumentisto/coturn
   #   ports:
-  #     - "4444:4444"
-  #   command: [ "--port", "4444", "--path", "/myapp", "--proxied", "true" ]
+  #     - "3478:3478"
   #   networks:
   #     - network-1
-
 
 networks:
   network-1:

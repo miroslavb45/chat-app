@@ -19,6 +19,6 @@ function* navigateToListener(action) {
   }
 }
 
-export function* navigationListenerSaga() {
+export default function* navigationListenerSaga() {
   yield takeEvery(navigateToAction, navigateToListener);
 }

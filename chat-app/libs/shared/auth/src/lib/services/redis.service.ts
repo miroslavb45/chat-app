@@ -9,7 +9,7 @@ import { FirebaseService } from './firebase.service';
 
 
 @Injectable()
-export class CacheService {
+export class RedisService {
     client: any;
 
     public constructor(private readonly authService: FirebaseService, private readonly userRepository: UserRepository, private readonly workspaceRepository: WorkspaceRepository) {
@@ -35,7 +35,6 @@ export class CacheService {
             });
         } catch (error) {
             console.error(`Failed to connect to Redis (${CONFIG.redis.host}:${CONFIG.redis.port}): ${error.message}`, null);
-
         }
 
     }
@@ -62,6 +61,42 @@ export class CacheService {
         }
     }
 
+    public async moveUserFromOnlineToInCallUsers(workspaceUserId: string, workspaceId: string): Promise<void> {
+        await this.removeFromSet(`workspace:${workspaceId}:onlineUsers`, workspaceUserId);
+        await this.addToSet(`workspace:${workspaceId}:inCallUsers`, workspaceUserId);
+    }
+
+    public async moveUserFromInCallToOnlineUsers(workspaceUserId: string, workspaceId: string): Promise<void> {
+        await this.removeFromSet(`workspace:${workspaceId}:inCallUsers`, workspaceUserId);
+        await this.addToSet(`workspace:${workspaceId}:onlineUsers`, workspaceUserId);
+    }
+
+    public async initVideoCall(user1: string, user2: string): Promise<void> {
+        const callKey = `call:${[user1, user2].sort().reduce((a, c, idx) => a += `${idx === 0 ? c : `:${c}`}`, '')}`;
+
+        if (!(await this.keyExists(callKey))) {
+            this.set(callKey, 'Ringing');
+        }
+    }
+
+    public async endVideoCall(user1: string, user2: string): Promise<void> {
+        const callKey = `call:${[user1, user2].sort().reduce((a, c, idx) => a += `${idx === 0 ? c : `:${c}`}`, '')}`;
+
+        if ((await this.keyExists(callKey))) {
+            this.del(callKey);
+        }
+    }
+
+    public async acceptVideoCall(user1: string, user2: string): Promise<void> {
+        const callKey = `call:${[user1, user2].sort().reduce((a, c, idx) => a += `${idx === 0 ? c : `:${c}`}`, '')}`;
+
+        if ((await this.keyExists(callKey))) {
+            this.set(callKey, 'InCall');
+        }
+    }
+
+
+
     public async getWorkspaceUsersAvailabilities(workspaceId: string): Promise<{ onlineUsers: Set<string>, inCallUsers: Set<string> }> {
 
         const onlineUsers = await this.getSetElements(`workspace:${workspaceId}:onlineUsers`)
@@ -70,27 +105,19 @@ export class CacheService {
         return { onlineUsers: new Set(onlineUsers), inCallUsers: new Set(inCallUsers) };
     }
 
-    public async removeWorkspaceUserFromOnlineUsers(client: Socket): Promise<{ workspaceId: string, userId: string, shouldNotify: boolean }> {
+    public async removeWorkspaceUserFromOnlineUsers(wsClientId: string, workspaceId: string, workspaceUserId: string): Promise<{ workspaceId: string, userId: string, shouldNotify: boolean }> {
         try {
-            const auth = await this.authService.validateToken(client.handshake.auth.jwt);
 
-            if (auth) {
-                const dbUser = await this.userRepository.findByEmail(auth.email);
+            await this.removeFromSet(`workspaceUser:${workspaceUserId}:connections`, wsClientId);
 
-                const workspaceUser = await this.workspaceRepository.getWorkspaceUser(dbUser._id, dbUser.activeWorkspace?._id);
+            const exists = await this.keyExists(`workspaceUser:${workspaceUserId}:connections`);
 
-                await this.removeFromSet(`workspaceUser:${workspaceUser._id.toString()}:connections`, client.id);
-
-                const exists = await this.keyExists(`workspaceUser:${workspaceUser._id.toString()}:connections`);
-
-                if (!exists) {
-                    await this.removeFromSet(`workspace:${workspaceUser.workspace}:onlineUsers`, workspaceUser._id.toString());
-                }
-
-                return { workspaceId: workspaceUser.workspace._id.toString(), userId: workspaceUser._id.toString(), shouldNotify: !exists };
-            } else {
-                throw new Error('Not valid JWT.')
+            if (!exists) {
+                await this.removeFromSet(`workspace:${workspaceId}:onlineUsers`, workspaceUserId);
+                await this.removeFromSet(`workspace:${workspaceId}:inCallUsers`, workspaceUserId);
             }
+
+            return { workspaceId: workspaceId, userId: workspaceUserId, shouldNotify: !exists };
 
         } catch (error) {
             console.error(error);
@@ -106,6 +133,28 @@ export class CacheService {
     public async addToSet(key: string, ...values: string[]): Promise<number> {
         return await this.client.sadd(key, ...values);
     }
+
+
+    /**
+    * Set key value.
+    * @param {string} key
+    * @param {string} value
+    * @return {Promise<number>}
+    */
+    public async set(key: string, value: string): Promise<number> {
+        return await this.client.set(key, value);
+    }
+
+    /**
+    * Set key value.
+    * @param {string} key
+    * @param {string} value
+    * @return {Promise<number>}
+    */
+    public async del(key: string): Promise<number> {
+        return await this.client.del(key);
+    }
+
 
     /**
     * Remove element(s) from a set.
@@ -140,7 +189,14 @@ export class CacheService {
     * @return {Promise<boolean>}
     */
     public async isInSet(key: string, value: string): Promise<boolean> {
-        return (await this.client.sismember(key, value)) > 0;
+        return (await new Promise((res, rej) => {
+            this.client.sismember(key, value, (err, reply) => {
+                if (err) {
+                    rej(err);
+                }
+                res(reply);
+            })
+        })) > 0;
     }
 
     /**

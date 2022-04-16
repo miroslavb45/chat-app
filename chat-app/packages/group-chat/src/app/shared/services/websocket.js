@@ -13,6 +13,7 @@ import {
   userJoinedAction,
   userLeftAction,
 } from '../../scenes/Home/components/Messaging/actions';
+import { callEndedAction, callEndedSuccess, callStartedAction, callStartedMessage, callStartedSuccess, incomingCallAction } from '../../scenes/VideoChat/actions';
 
 let websocketConnection = null;
 
@@ -79,6 +80,20 @@ export const connectToWebsocket = async () => {
 
   websocketConnection.on('USER_LEFT_MESSAGE', (e) => {
     store.dispatch(userLeftAction(e));
+  });
+
+  // Video Call action listeners
+  websocketConnection.on('CALL_STARTED_MESSAGE', (e) => {
+    console.log('Call started')
+    store.dispatch(callStartedAction(e));
+  });
+
+  websocketConnection.on('CALL_ENDED_MESSAGE', (e) => {
+    store.dispatch(callEndedAction(e));
+  });
+
+  websocketConnection.on('INCOMING_CALL_MESSAGE', (e) => {
+    store.dispatch(incomingCallAction(e));
   });
 };
 

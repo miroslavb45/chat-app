@@ -1,5 +1,5 @@
 import { MessagingRepository, WorkspaceRepository } from '@chat-app/entity-repository';
-import { AuthorizationInterceptor, CacheService, RequestDto } from '@chat-app/shared/auth';
+import { AuthorizationInterceptor, RedisService, RequestDto } from '@chat-app/shared/auth';
 import { Controller, forwardRef, Get, HttpCode, Inject, NotFoundException, Post, Query, Req, UnprocessableEntityException, UseInterceptors } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { ErrorInterceptor } from '../../interceptors/error.interceptor';
@@ -11,7 +11,7 @@ import { MessagingResponseDto } from './dtos/messaging-response.dto';
 @UseInterceptors(ErrorInterceptor)
 @Controller()
 export class MessagingController {
-  public constructor(private readonly workspaceRepository: WorkspaceRepository, private readonly messagingRepository: MessagingRepository, @Inject(forwardRef(() => CacheService)) private readonly cacheService: CacheService, private readonly messagingService: MessagingService) { }
+  public constructor(private readonly workspaceRepository: WorkspaceRepository, private readonly messagingRepository: MessagingRepository, @Inject(forwardRef(() => RedisService)) private readonly redisService: RedisService, private readonly messagingService: MessagingService) { }
 
   @Get('workspaceUsers')
   @HttpCode(200)
@@ -31,7 +31,7 @@ export class MessagingController {
 
     const workspaceUsers = await this.workspaceRepository.getMultipleWorkspaceUser(dbWorkspace.joinedUsers as Types.ObjectId[]);
 
-    const availabilities = await this.cacheService.getWorkspaceUsersAvailabilities(dbWorkspace._id.toString());
+    const availabilities = await this.redisService.getWorkspaceUsersAvailabilities(dbWorkspace._id.toString());
 
     const mappedAvailabilities = workspaceUsers.reduce((a, c) => {
       const workspaceUserId = c._id.toString();
@@ -81,7 +81,6 @@ export class MessagingController {
     for (const message of messages) {
       await this.messagingService.deletePrivateMessage(message._id.toString());
     }
-
 
     return { _id: entityId };
   }
