@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { connectToWebsocket } from '../../shared/services/websocket';
 import Topbar from '../../shared/Topbar';
+import VideoChat from '../VideoChat/VideoChat';
 import { getWorkspaceAction } from '../Workspace/actions';
 import { getJoinedChannels } from './actions';
 import { Channel } from './components/Channel';
@@ -71,26 +72,30 @@ class Home extends Component {
   }
   render() {
     return (
-      <div className={styles.wrapper} style={{ backgroundImage: `url(${background})` }}>
-        <div className={styles.overlay}></div>
-        <Topbar />
-        <div className={styles.sidebarWrapper}>
-          <Sidebar></Sidebar>
+      <>
+        <div className={styles.wrapper} style={{ backgroundImage: `url(${background})` }}>
+          <div className={styles.overlay}></div>
+          <Topbar />
+          <div className={styles.sidebarWrapper}>
+            <Sidebar></Sidebar>
+          </div>
+
+          <div className={styles.mainWrapper}>{this.activeMainContent}</div>
+
+          {this.props.isModalOpen && (
+            <>
+              <CreateChannelModal></CreateChannelModal>
+              <RenameChannelModal></RenameChannelModal>
+              <DeleteChannelModal></DeleteChannelModal>
+
+              <DeleteMessagingModal></DeleteMessagingModal>
+              <ProfileSettingsModal />
+            </>
+          )}
         </div>
 
-        <div className={styles.mainWrapper}>{this.activeMainContent}</div>
-
-        {this.props.isModalOpen && (
-          <>
-            <CreateChannelModal></CreateChannelModal>
-            <RenameChannelModal></RenameChannelModal>
-            <DeleteChannelModal></DeleteChannelModal>
-
-            <DeleteMessagingModal></DeleteMessagingModal>
-            <ProfileSettingsModal />
-          </>
-        )}
-      </div>
+        <VideoChat></VideoChat>
+      </>
     );
   }
 }

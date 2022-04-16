@@ -1,14 +1,16 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import VideoCallIcon from '@mui/icons-material/VideoCall';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { DaySeparator } from '../../../../shared/DaySeparator';
 import { MessageInput } from '../../../../shared/MessageInput';
+import { toggleOutgoingVideoCallModal } from '../../../VideoChat/actions';
 import { getPrivateMessaging, modifyPrivateMessage, sendPrivateMessage } from './actions';
-import { PrivateMessage } from './components/PrivateMessage';
-import DeleteIcon from '@mui/icons-material/Delete';
-
-import styles from './styles.module.scss';
 import { toggleDeleteMessagingModalAction } from './components/DeleteMessagingModal/actions';
+import { PrivateMessage } from './components/PrivateMessage';
+import styles from './styles.module.scss';
+
 
 class Messaging extends Component {
   componentDidMount() {
@@ -31,6 +33,12 @@ class Messaging extends Component {
 
   handleDeleteClick = () => {
     this.props.dispatch(toggleDeleteMessagingModalAction());
+  };
+
+  handleStartVideoCall = () => {
+    this.props.dispatch(
+      toggleOutgoingVideoCallModal({ partnerId: this.props.partnerId, partnerName: this.props.partnerName })
+    );
   };
 
   handleMessageEdit = ({ messageId, content }) => {
@@ -91,7 +99,6 @@ class Messaging extends Component {
               key={item._id}
               message={item}
             ></PrivateMessage>
-
           ))
         );
         return a;
@@ -107,15 +114,19 @@ class Messaging extends Component {
           <div className={styles.headerWrapper}>
             <div className={styles.info}>
               <div>{this.props.partnerName}</div>
-              <div className={styles.joinedUsersWrapper}>
-                {/* <PersonIcon></PersonIcon> {this.props.joinedUserNumber} */}
-              </div>
             </div>
 
             <div className={styles.actions}>
+              {this.props.partnerAvailability !== 'InCall' && (
+                <div className={styles.delete} onClick={this.handleStartVideoCall}>
+                  <VideoCallIcon />
+                  start video call
+                </div>
+              )}
+
               <div className={styles.delete} onClick={this.handleDeleteClick}>
                 <DeleteIcon />
-                Delete conversation
+                delete conversation
               </div>
             </div>
           </div>
@@ -140,6 +151,9 @@ const mapStateToPros = (state, props) => ({
   userId: state.user.workspaceUser._id,
   userRole: state.user.workspaceUser?.role,
   partnerName: state.messaging.activeMessaging?.name,
+  partnerId: state.messaging.activeMessaging?.id,
+  partnerAvailability: state.messaging?.availableUsers?.find((item) => item.id === state.messaging.activeMessaging?.id)
+    ?.availability,
 });
 
 export default connect(mapStateToPros)(Messaging);

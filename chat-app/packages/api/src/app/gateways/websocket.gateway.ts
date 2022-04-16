@@ -1,7 +1,7 @@
 import { ChannelMessage, PrivateMessage, WorkspaceUser } from '@chat-app/dbal';
 import { ChannelRepository, MessagingRepository } from '@chat-app/entity-repository';
-import { CacheService, WebsocketInterceptor } from '@chat-app/shared/auth';
-import { forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException, UseInterceptors } from '@nestjs/common';
+import { RedisService, WebsocketInterceptor } from '@chat-app/shared/auth';
+import { forwardRef, Inject, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException, UseInterceptors } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -14,6 +14,7 @@ import { Server, Socket } from 'socket.io';
 import { ChannelMessagesMessage, DeleteChannelMessagesMessage, DeletedChannelMessageMessage, JoinToChannelMessage, ModifiedChannelMessageMessage, ModifyChannelMessagesMessage, SendChannelMessagesMessage, SubscribedToChannelMessage, SubscribeToChannelMessage } from '../constants/channel-message.constants';
 import { DeletedPrivateMessageMessage, DeletePrivateMessagesMessage, ModifiedPrivateMessageMessage, ModifyPrivateMessagesMessage, PrivateMessagesMessage, SendPrivateMessagesMessage, SubscribeToPrivateMessagingMessage, UserJoined, UserLeft } from '../constants/private-message-message.constants';
 import { Roles } from '../constants/roles.enum';
+import { AcceptCallMessage, CallEndedMessage, CallStartedMessage, EndCallMessage, IncomingCallMessage, StartCallMessage } from '../constants/video-chat-message.constants';
 import { DeleteChannelMessageRequestDto } from '../dtos/delete-channel-message-request.dto';
 import { DeletePrivateMessageRequestDto } from '../dtos/delete-private-message-request.dto';
 import { ModifyChannelMessageRequestDto } from '../dtos/modify-channel-message-request.dto';
@@ -24,7 +25,7 @@ import { SubscribeChannelRequestDto } from '../dtos/subscribe-channel-request.dt
 import { SubscribeMessagingRequestDto } from '../dtos/subscribe-messaging-request.dto';
 import { ChannelService } from '../services/channel.service';
 import { MessagingService } from '../services/messaging.service';
-
+import { VideoChatService } from '../services/video-chat.service';
 
 @UseInterceptors(WebsocketInterceptor)
 @WebSocketGateway({ cors: true })
@@ -34,20 +35,22 @@ export class WebsocketGateway implements OnGatewayDisconnect, OnGatewayConnectio
   @WebSocketServer()
   private server: Server;
 
-  public constructor(private channelService: ChannelService, private channelRepository: ChannelRepository, @Inject(forwardRef(() => CacheService)) private readonly cacheService: CacheService, private readonly messagingRepository: MessagingRepository, private readonly messagingService: MessagingService) {
+  public constructor(private channelService: ChannelService, private channelRepository: ChannelRepository, @Inject(forwardRef(() => RedisService)) private readonly redisService: RedisService, private readonly messagingRepository: MessagingRepository, private readonly messagingService: MessagingService, private readonly videoChatService: VideoChatService) {
   }
 
   public async handleDisconnect(client: Socket) {
-    const { shouldNotify, userId, workspaceId } = await this.cacheService.removeWorkspaceUserFromOnlineUsers(client);
+
+    const workspaceUser = (client.data.workspaceUser as WorkspaceUser);
+
+    const { shouldNotify, userId, workspaceId } = await this.redisService.removeWorkspaceUserFromOnlineUsers(client.id, workspaceUser.workspace._id.toString(), workspaceUser._id.toString());
 
     if (shouldNotify) {
       await this.server.to(workspaceId).emit(UserLeft, { userId: userId });
     }
-
   }
 
   public async handleConnection(client: Socket) {
-    const { shouldNotify, workspaceId, userId } = await this.cacheService.addWorkspaceUserToOnlineUsers(client);
+    const { shouldNotify, workspaceId, userId } = await this.redisService.addWorkspaceUserToOnlineUsers(client);
 
     await client.join(workspaceId);
 
@@ -244,4 +247,68 @@ export class WebsocketGateway implements OnGatewayDisconnect, OnGatewayConnectio
       console.error(error);
     }
   }
+
+
+  @SubscribeMessage(StartCallMessage)
+  public async startCallAction(client: Socket, payload: { workspaceUserId: string }): Promise<void> {
+    try {
+
+      if (!payload.workspaceUserId) {
+        throw new UnprocessableEntityException('No user id provided.');
+      }
+
+      const workspaceUser1 = (client.data.workspaceUser as WorkspaceUser);
+
+      await this.videoChatService.startCall((client.data.workspaceUser as WorkspaceUser)._id.toString(), payload.workspaceUserId, workspaceUser1.workspace._id.toString());
+
+      const subscriptionKey = [(client.data.workspaceUser as WorkspaceUser)._id.toString(), payload.workspaceUserId].sort().reduce((a, c) => a += c, '');
+
+      this.server.to(subscriptionKey).emit(IncomingCallMessage, { from: (client.data.workspaceUser as WorkspaceUser)._id.toString(), to: payload.workspaceUserId });
+
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+
+  @SubscribeMessage(EndCallMessage)
+  public async endCallAction(client: Socket, payload: { workspaceUserId: string }): Promise<void> {
+    try {
+
+      if (!payload.workspaceUserId) {
+        throw new UnprocessableEntityException('No user id provided.');
+      }
+
+      const workspaceUser1 = (client.data.workspaceUser as WorkspaceUser);
+
+      await this.videoChatService.endCall((client.data.workspaceUser as WorkspaceUser)._id.toString(), payload.workspaceUserId, workspaceUser1.workspace._id.toString());
+
+
+      const subscriptionKey = [(client.data.workspaceUser as WorkspaceUser)._id.toString(), payload.workspaceUserId].sort().reduce((a, c) => a += c, '');
+
+      this.server.to(subscriptionKey).emit(CallEndedMessage, { from: (client.data.workspaceUser as WorkspaceUser)._id.toString(), to: payload.workspaceUserId });
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  @SubscribeMessage(AcceptCallMessage)
+  public async acceptCallAction(client: Socket, payload: { workspaceUserId: string }): Promise<void> {
+    try {
+
+      if (!payload.workspaceUserId) {
+        throw new UnprocessableEntityException('No user id provided.');
+      }
+
+      await this.videoChatService.acceptCall((client.data.workspaceUser as WorkspaceUser)._id.toString(), payload.workspaceUserId);
+
+      const subscriptionKey = [(client.data.workspaceUser as WorkspaceUser)._id.toString(), payload.workspaceUserId].sort().reduce((a, c) => a += c, '');
+
+      this.server.to(subscriptionKey).emit(CallStartedMessage, { from: payload.workspaceUserId, to: (client.data.workspaceUser as WorkspaceUser)._id.toString() });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 }

@@ -17,7 +17,6 @@ async function bootstrap() {
   app.enableCors({
     methods: 'GET, POST',
     origin: true,
-    // // transports: ['websocket', 'polling']
     credentials: true,
 
   })
