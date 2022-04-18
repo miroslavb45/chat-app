@@ -2,9 +2,8 @@
 import { ChannelRepository, EntityRepositoryModule, MessagingRepository, UserRepository, WorkspaceRepository } from '@chat-app/entity-repository';
 import { AuthService, FirebaseService, PreauthMiddleware, RedisService, WorkspaceService } from '@chat-app/shared/auth';
 import { CONFIG } from '@chat-app/shared/config';
-import { CacheModule, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import * as redisStore from 'cache-manager-redis-store';
 import { WebsocketGateway } from './gateways/websocket.gateway';
 import { ChannelController } from './rest-api/channel/channel.controller';
 import { MessagingController } from './rest-api/messaging/messaging.controller';
@@ -19,13 +18,6 @@ import { VideoChatService } from './services/video-chat.service';
 
 @Module({
   imports: [
-    CacheModule.register({
-      store: redisStore,
-      host: CONFIG.redis.host,
-      port: CONFIG.redis.port,
-      db: CONFIG.redis.database,
-      auth_pass: CONFIG.redis.password
-    }),
     ClientsModule.register([
       {
         name: 'API', transport: Transport.REDIS,
